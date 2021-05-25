@@ -3,14 +3,11 @@ package com.sies.movierecomendations;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import com.google.firebase.auth.FirebaseAuth;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -36,23 +33,14 @@ public class Movies extends AppCompatActivity {
         setContentView(R.layout.activity_movies);
 
 
-//        code for future changes
         Intent intent = getIntent();
         int value = intent.getIntExtra("genreId", 12);
 //        Toast.makeText(Movies.this, Integer.toString(value), Toast.LENGTH_SHORT).show();
         getApi(value);
 
-
-        Button logout = findViewById(R.id.logout);
-
         moviesRecyclerView = findViewById(R.id.recyclerView);
         moviesRecyclerView.setLayoutManager(new LinearLayoutManager(Movies.this));
 
-        logout.setOnClickListener(v -> {
-            FirebaseAuth.getInstance().signOut();
-            startActivity(new Intent(Movies.this, SignIn.class));
-            finish();
-        });
     }
 
     public void getApi(int genreID) {

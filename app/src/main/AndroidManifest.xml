@@ -13,7 +13,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MaterialComponents.NoActionBar"
         tools:ignore="AllowBackup">
-        <activity android:name=".ForgotPassword"></activity>
+        <activity android:name=".Profile"/>
+        <activity android:name=".ForgotPassword" />
         <activity android:name=".Movies" />
         <activity android:name=".SignUp" />
         <activity android:name=".MainActivity" />

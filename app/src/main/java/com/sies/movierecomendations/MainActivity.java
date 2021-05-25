@@ -1,7 +1,9 @@
 package com.sies.movierecomendations;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -30,8 +32,12 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        Button profile = findViewById(R.id.profile);
+
         movies = findViewById(R.id.movies);
         movies.setLayoutManager(new LinearLayoutManager(MainActivity.this));
+
+        profile.setOnClickListener(v -> startActivity(new Intent(MainActivity.this, Profile.class)));
 
         movieDbAPI.getGenre(API_KEY).enqueue(new Callback<GenreList>() {
             @Override
