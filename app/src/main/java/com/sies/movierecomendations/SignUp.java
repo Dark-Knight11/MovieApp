@@ -2,6 +2,7 @@ package com.sies.movierecomendations;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -25,6 +26,7 @@ public class SignUp extends AppCompatActivity {
     ProgressBar pgbar;
     private FirebaseAuth mAuth;
     private String Name, emailId, pass;
+    private Handler mHandler = new Handler();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,7 +82,7 @@ public class SignUp extends AppCompatActivity {
                         Objects.requireNonNull(mAuth.getCurrentUser()).sendEmailVerification().addOnCompleteListener(this, work -> {
                             if(work.isSuccessful()) {
                                 // Sign in success, update UI with the signed-in user's information
-                                Toast.makeText(SignUp.this, "Please Check your Email for verification",Toast.LENGTH_SHORT).show();
+                                Toast.makeText(SignUp.this, "Please Check your Email for Verification link",Toast.LENGTH_SHORT).show();
                                 startActivity(new Intent(SignUp.this, SignIn.class));
                                 finish();
                             }else {
@@ -94,7 +96,14 @@ public class SignUp extends AppCompatActivity {
                     } else {
                         // If sign in fails, display a message to the user.
                         Log.w("TAG", "createUserWithEmail:failure", task.getException());
-                        Toast.makeText(SignUp.this, Objects.requireNonNull(task.getException()).toString(), Toast.LENGTH_SHORT).show();
+                        if(Objects.requireNonNull(task.getException()).toString().contains("The email address is already in use by another account")) {
+                            Toast.makeText(SignUp.this, "User already exists please log in", Toast.LENGTH_SHORT).show();
+                            Runnable mUpdateTimeTask = () -> {
+                                startActivity(new Intent(SignUp.this, SignIn.class));
+                                finish();
+                            };
+                            mHandler.postDelayed(mUpdateTimeTask, 200);
+                        }
                         pgbar.setVisibility(View.GONE);
                     }
                 });
