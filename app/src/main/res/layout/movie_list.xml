@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="20dp"
+    android:layout_marginBottom="20dp">
+
+    <RelativeLayout
+        android:id="@+id/frame"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        tools:ignore="UselessParent">
+
+         <ImageView
+             android:id="@+id/image"
+             android:layout_width="match_parent"
+             android:layout_height="200dp"
+             android:scaleType="fitXY"
+             android:src="@drawable/ic_launcher_background"
+             tools:ignore="ContentDescription" />
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/image"
+            android:layout_centerHorizontal="true"
+            android:text="Happy"
+            android:textSize="20sp"
+            android:padding="5dp"
+            tools:ignore="HardcodedText" />
+
+        <TextView
+            android:id="@+id/releaseDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/title"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            android:text="1314123553"
+            tools:ignore="HardcodedText" />
+
+        <TextView
+            android:id="@+id/description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_centerHorizontal="true"
+            android:text="Loremispadbqkwkebfwkefnwejhbfewkjbfwkebfwekwebfw"
+            android:layout_below="@id/releaseDate"
+            tools:ignore="HardcodedText"
+            android:padding="5dp"
+            android:visibility="gone"/>
+
+    </RelativeLayout>
+</androidx.cardview.widget.CardView>

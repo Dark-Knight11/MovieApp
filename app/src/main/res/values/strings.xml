@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">Movie Recomendations</string>
+    <string name="happy">Happy</string>
+    <string name="sad">Sad</string>
+    <string name="horror">Horror</string>
+    <string name="anime">Anime</string>
+    <string name="movie_recommendations">Movie Recommendations</string>
+    <string name="new_here_sign_up">New here? Sign Up</string>
+    <string name="login">Login</string>
+    <string name="already_a_user_log_in">Already a user? Log In</string>
+    <string name="register">Register</string>
+    <string name="email">Email</string>
+    <string name="name">Name</string>
+    <string name="password">Password</string>
+    <string name="logout">Logout</string>
+</resources>
