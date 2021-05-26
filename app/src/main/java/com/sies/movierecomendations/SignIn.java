@@ -1,6 +1,8 @@
 package com.sies.movierecomendations;
 
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -15,6 +17,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.sies.movierecomendations.GenreRecycler.MainActivity;
 
 import java.util.Objects;
 import java.util.regex.Matcher;
@@ -38,6 +41,9 @@ public class SignIn extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
 
+        if(!networkWhere())
+            Toast.makeText(SignIn.this, "No Internet Found", Toast.LENGTH_SHORT).show();
+
         mAuth = FirebaseAuth.getInstance();
         FirebaseUser user = mAuth.getCurrentUser();
 
@@ -45,8 +51,7 @@ public class SignIn extends AppCompatActivity {
             Toast.makeText(SignIn.this, "You are Logged in", Toast.LENGTH_SHORT).show();
             startActivity(new Intent(SignIn.this, MainActivity.class));
             finish();
-        }
-        else {
+        } else {
             email = findViewById(R.id.email);
             pass = findViewById(R.id.password);
             signup = findViewById(R.id.signup);
@@ -68,13 +73,15 @@ public class SignIn extends AppCompatActivity {
             resend.setOnClickListener(v -> {
                 emailId = email.getText().toString().trim();
                 password = pass.getText().toString().trim();
-                if(fieldsValidation()) return;
+
+                if (fieldsValidation()) return;
+
                 mAuth.signInWithEmailAndPassword(emailId, password).addOnCompleteListener(task -> {
-                    if(task.isSuccessful()) {
+                    if (task.isSuccessful()) {
                         mAuth.getCurrentUser().sendEmailVerification().addOnCompleteListener(task1 -> {
-                            if(task1.isSuccessful()) {
-                                Toast.makeText(SignIn.this, "Please Check your Email for Verification link",Toast.LENGTH_SHORT).show();
-                            } else {
+                            if (task1.isSuccessful())
+                                Toast.makeText(SignIn.this, "Please Check your Email for Verification link", Toast.LENGTH_SHORT).show();
+                            else {
                                 // If sign up fails, display a message to the user.
                                 Log.w("TAG", "createUserWithEmail:failure", task1.getException());
                                 Toast.makeText(SignIn.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
@@ -85,9 +92,8 @@ public class SignIn extends AppCompatActivity {
                         Log.w("TAG", "signInUserWithEmail:failure", task.getException());
                         if (Objects.requireNonNull(task.getException()).toString().contains("The password is invalid"))
                             Toast.makeText(SignIn.this, "Wrong Password", Toast.LENGTH_SHORT).show();
-                        else if (Objects.requireNonNull(task.getException()).toString().contains("There is no user record corresponding to this identifier")) {
+                        else if (Objects.requireNonNull(task.getException()).toString().contains("There is no user record corresponding to this identifier"))
                             Toast.makeText(SignIn.this, "User does not exist. Please create new account", Toast.LENGTH_SHORT).show();
-                        }
 
                     }
                 });
@@ -98,7 +104,10 @@ public class SignIn extends AppCompatActivity {
                 emailId = email.getText().toString().trim();
                 password = pass.getText().toString().trim();
 
-                if(fieldsValidation()) return;
+                if(!networkWhere())
+                    Toast.makeText(SignIn.this, "No Internet Found", Toast.LENGTH_SHORT).show();
+
+                if (!fieldsValidation()) return;
 
                 pgbar.setVisibility(View.VISIBLE);
                 Sign_In();
@@ -130,13 +139,13 @@ public class SignIn extends AppCompatActivity {
 
     private boolean fieldsValidation() {
         Matcher matcher = pattern.matcher(emailId);
-        boolean flag = false;
+        boolean flag = true;
 
         // checks if email field is empty
         if (TextUtils.isEmpty(emailId)) {
             email.setError("Email Required");
             email.requestFocus();
-            flag = true;
+            flag = false;
             return flag;
         }
 
@@ -144,7 +153,7 @@ public class SignIn extends AppCompatActivity {
         if (!matcher.matches()) {
             email.setError("Please enter valid email");
             email.requestFocus();
-            flag = true;
+            flag = false;
             return flag;
         }
 
@@ -152,7 +161,7 @@ public class SignIn extends AppCompatActivity {
         if (TextUtils.isEmpty(password)) {
             pass.setError("Password Required");
             pass.requestFocus();
-            flag = true;
+            flag = false;
             return flag;
         }
 
@@ -160,9 +169,29 @@ public class SignIn extends AppCompatActivity {
         if (password.length() < 8) {
             pass.setError("Password should be of at least 8 characters");
             pass.requestFocus();
-            flag = true;
+            flag = false;
             return flag;
         }
         return flag;
+    }
+
+    private boolean networkWhere() {
+
+        boolean have_WIFI = false;
+        boolean have_MobileData = false;
+
+        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
+        NetworkInfo[] networkInfos = connectivityManager.getAllNetworkInfo();
+
+        for(NetworkInfo info: networkInfos) {
+            if (info.getTypeName().equalsIgnoreCase("WIFI"))
+                if (info.isConnected())
+                    have_WIFI = true;
+            if (info.getTypeName().equalsIgnoreCase("MOBILE"))
+                if (info.isConnected())
+                    have_MobileData = true;
+
+        }
+        return have_MobileData || have_WIFI;
     }
 }

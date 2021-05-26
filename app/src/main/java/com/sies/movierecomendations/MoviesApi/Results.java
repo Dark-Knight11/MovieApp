@@ -1,4 +1,4 @@
-package com.sies.movierecomendations;
+package com.sies.movierecomendations.MoviesApi;
 
 public class Results {
     private String title;

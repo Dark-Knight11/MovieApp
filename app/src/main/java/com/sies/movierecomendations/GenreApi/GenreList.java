@@ -1,4 +1,4 @@
-package com.sies.movierecomendations;
+package com.sies.movierecomendations.GenreApi;
 
 import java.util.List;
 

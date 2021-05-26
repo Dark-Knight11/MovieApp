@@ -1,12 +1,12 @@
 package com.sies.movierecomendations;
 
 public class User {
-    public String emailid, Name;
+    public String Email, Name, phone;
 
     public User() { }
 
-    public User(String emailid, String name) {
-        this.emailid = emailid;
-        Name = name;
+    public User(String Email, String name) {
+        this.Email = Email;
+        this.Name = name;
     }
 }

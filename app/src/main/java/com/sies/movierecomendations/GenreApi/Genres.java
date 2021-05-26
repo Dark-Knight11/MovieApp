@@ -1,4 +1,4 @@
-package com.sies.movierecomendations;
+package com.sies.movierecomendations.GenreApi;
 
 public class Genres {
     private int id;

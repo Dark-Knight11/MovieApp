@@ -52,6 +52,7 @@ public class SignUp extends AppCompatActivity {
         // Initialize Firebase Auth
         mAuth = FirebaseAuth.getInstance();
 
+
         signin.setOnClickListener(v -> {
             startActivity(new Intent(SignUp.this, SignIn.class));
             finish();
@@ -125,7 +126,7 @@ public class SignUp extends AppCompatActivity {
     }
 
     private void sendEmail() {
-        mAuth.getCurrentUser().sendEmailVerification().addOnCompleteListener(task1 -> {
+        Objects.requireNonNull(mAuth.getCurrentUser()).sendEmailVerification().addOnCompleteListener(task1 -> {
             if(task1.isSuccessful()) {
                 Toast.makeText(SignUp.this, "Please Check your Email for Verification link",Toast.LENGTH_SHORT).show();
                 enterData();
@@ -139,9 +140,9 @@ public class SignUp extends AppCompatActivity {
     }
 
     private void enterData() {
-        User user = new User(Name, emailId);
+        User user = new User(emailId, Name);
         FirebaseDatabase.getInstance().getReference("Users")
-                .child(mAuth.getCurrentUser().getUid())
+                .child(Objects.requireNonNull(mAuth.getCurrentUser()).getUid())
                 .setValue(user)
                 .addOnCompleteListener(task2 -> {
             if(task2.isSuccessful()) {

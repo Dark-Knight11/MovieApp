@@ -1,13 +1,23 @@
-package com.sies.movierecomendations;
+package com.sies.movierecomendations.GenreRecycler;
 
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.sies.movierecomendations.BuildConfig;
+import com.sies.movierecomendations.GenreApi.GenreList;
+import com.sies.movierecomendations.MovieDbAPI;
+import com.sies.movierecomendations.Profile;
+import com.sies.movierecomendations.R;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -32,6 +42,13 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        if (!networkWhere()) {
+            TextView _404 = findViewById(R.id.noInternet);
+            _404.setText("404\nPlease Connect to Internet");
+            _404.setVisibility(View.VISIBLE);
+
+        }
+
         Button profile = findViewById(R.id.profile);
 
         movies = findViewById(R.id.movies);
@@ -52,6 +69,25 @@ public class MainActivity extends AppCompatActivity {
                 Log.i("onFailure: ", t.getMessage());
             }
         });
+    }
 
+    private boolean networkWhere() {
+
+        boolean have_WIFI = false;
+        boolean have_MobileData = false;
+
+        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
+        NetworkInfo[] networkInfos = connectivityManager.getAllNetworkInfo();
+
+        for(NetworkInfo info: networkInfos) {
+            if (info.getTypeName().equalsIgnoreCase("WIFI"))
+                if (info.isConnected())
+                    have_WIFI = true;
+            if (info.getTypeName().equalsIgnoreCase("MOBILE"))
+                if (info.isConnected())
+                    have_MobileData = true;
+
+        }
+        return have_MobileData || have_WIFI;
     }
 }

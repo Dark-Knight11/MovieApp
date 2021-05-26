@@ -4,6 +4,9 @@
     package="com.sies.movierecomendations">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+
 
     <application
         android:allowBackup="true"
@@ -15,9 +18,9 @@
         tools:ignore="AllowBackup">
         <activity android:name=".Profile"/>
         <activity android:name=".ForgotPassword" />
-        <activity android:name=".Movies" />
+        <activity android:name=".MoviesRecycler.Movies" />
         <activity android:name=".SignUp" />
-        <activity android:name=".MainActivity" />
+        <activity android:name=".GenreRecycler.MainActivity" />
         <activity android:name=".SignIn">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

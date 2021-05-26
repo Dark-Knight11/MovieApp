@@ -1,4 +1,4 @@
-package com.sies.movierecomendations;
+package com.sies.movierecomendations.MoviesRecycler;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,6 +8,11 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.sies.movierecomendations.BuildConfig;
+import com.sies.movierecomendations.MovieDbAPI;
+import com.sies.movierecomendations.MoviesApi.MoviesList;
+import com.sies.movierecomendations.R;
 
 import retrofit2.Call;
 import retrofit2.Callback;

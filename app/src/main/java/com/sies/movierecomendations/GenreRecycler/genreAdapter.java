@@ -1,4 +1,4 @@
-package com.sies.movierecomendations;
+package com.sies.movierecomendations.GenreRecycler;
 
 import android.content.Context;
 import android.content.Intent;
@@ -9,6 +9,10 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.sies.movierecomendations.GenreApi.GenreList;
+import com.sies.movierecomendations.MoviesRecycler.Movies;
+import com.sies.movierecomendations.R;
 
 public class genreAdapter extends RecyclerView.Adapter<genreAdapter.ViewHolder> {
 

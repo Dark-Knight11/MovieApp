@@ -1,4 +1,4 @@
-package com.sies.movierecomendations;
+package com.sies.movierecomendations.GenreRecycler;
 
 import android.widget.TextView;
 
