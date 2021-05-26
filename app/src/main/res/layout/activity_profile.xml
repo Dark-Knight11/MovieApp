@@ -20,12 +20,13 @@
 
         <ImageView
             android:id="@+id/imageView"
-            android:layout_width="50dp"
-            android:layout_height="60dp"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
             android:src="@drawable/pfp"
             tools:ignore="ContentDescription" />
+        </androidx.cardview.widget.CardView>
 
-    </androidx.cardview.widget.CardView>
+
 
     <EditText
         android:id="@+id/name"

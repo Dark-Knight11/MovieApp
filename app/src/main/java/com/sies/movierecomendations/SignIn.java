@@ -23,7 +23,7 @@ import java.util.regex.Pattern;
 public class SignIn extends AppCompatActivity {
 
     EditText email, pass;
-    TextView signup, forgot;
+    TextView signup, forgot, resend;
     Button login;
     ProgressBar pgbar;
     private FirebaseAuth mAuth;
@@ -42,7 +42,7 @@ public class SignIn extends AppCompatActivity {
         FirebaseUser user = mAuth.getCurrentUser();
 
         if (user != null && user.isEmailVerified()) {
-            Toast.makeText(SignIn.this, "You are logged In", Toast.LENGTH_SHORT).show();
+            Toast.makeText(SignIn.this, "You are Logged in", Toast.LENGTH_SHORT).show();
             startActivity(new Intent(SignIn.this, MainActivity.class));
             finish();
         }
@@ -51,6 +51,7 @@ public class SignIn extends AppCompatActivity {
             pass = findViewById(R.id.password);
             signup = findViewById(R.id.signup);
             forgot = findViewById(R.id.forgotPassword);
+            resend = findViewById(R.id.resend);
             login = findViewById(R.id.login);
             pgbar = findViewById(R.id.progressBar);
 
@@ -64,39 +65,41 @@ public class SignIn extends AppCompatActivity {
                 finish();
             });
 
+            resend.setOnClickListener(v -> {
+                emailId = email.getText().toString().trim();
+                password = pass.getText().toString().trim();
+                if(fieldsValidation()) return;
+                mAuth.signInWithEmailAndPassword(emailId, password).addOnCompleteListener(task -> {
+                    if(task.isSuccessful()) {
+                        mAuth.getCurrentUser().sendEmailVerification().addOnCompleteListener(task1 -> {
+                            if(task1.isSuccessful()) {
+                                Toast.makeText(SignIn.this, "Please Check your Email for Verification link",Toast.LENGTH_SHORT).show();
+                            } else {
+                                // If sign up fails, display a message to the user.
+                                Log.w("TAG", "createUserWithEmail:failure", task1.getException());
+                                Toast.makeText(SignIn.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
+                                pgbar.setVisibility(View.GONE);
+                            }
+                        });
+                    } else {
+                        Log.w("TAG", "signInUserWithEmail:failure", task.getException());
+                        if (Objects.requireNonNull(task.getException()).toString().contains("The password is invalid"))
+                            Toast.makeText(SignIn.this, "Wrong Password", Toast.LENGTH_SHORT).show();
+                        else if (Objects.requireNonNull(task.getException()).toString().contains("There is no user record corresponding to this identifier")) {
+                            Toast.makeText(SignIn.this, "User does not exist. Please create new account", Toast.LENGTH_SHORT).show();
+                        }
+
+                    }
+                });
+
+            });
+
             login.setOnClickListener(v -> {
                 emailId = email.getText().toString().trim();
                 password = pass.getText().toString().trim();
 
-                Matcher matcher = pattern.matcher(emailId);
+                if(fieldsValidation()) return;
 
-                // checks if email field is empty
-                if (TextUtils.isEmpty(emailId)) {
-                    email.setError("Email Required");
-                    email.requestFocus();
-                    return;
-                }
-
-                // checks if valid email is entered
-                if (!matcher.matches()) {
-                    email.setError("Please enter valid email");
-                    email.requestFocus();
-                    return;
-                }
-
-                // checks if password field is empty
-                if (TextUtils.isEmpty(password)) {
-                    pass.setError("Password Required");
-                    pass.requestFocus();
-                    return;
-                }
-
-                // checks if password length is greater than 8
-                if (password.length() < 8) {
-                    pass.setError("Password should be of at least 8 characters");
-                    pass.requestFocus();
-                    return;
-                }
                 pgbar.setVisibility(View.VISIBLE);
                 Sign_In();
             });
@@ -104,27 +107,62 @@ public class SignIn extends AppCompatActivity {
     }
 
     private void Sign_In() {
-        mAuth.signInWithEmailAndPassword(emailId, password).addOnCompleteListener(this, task ->  {
-                if(task.isSuccessful()) {
-                    if(Objects.requireNonNull(mAuth.getCurrentUser()).isEmailVerified()) {
-                        Toast.makeText(SignIn.this, "You are logged in", Toast.LENGTH_SHORT).show();
-                        startActivity(new Intent(SignIn.this, MainActivity.class));
-                        finish();
-                    }
-                    else
-                        Toast.makeText(SignIn.this, "Please verify your Email",Toast.LENGTH_SHORT).show();
+        mAuth.signInWithEmailAndPassword(emailId, password).addOnCompleteListener(this, task -> {
+            if (task.isSuccessful()) {
+                if (Objects.requireNonNull(mAuth.getCurrentUser()).isEmailVerified()) {
+                    Toast.makeText(SignIn.this, "You are logged in", Toast.LENGTH_SHORT).show();
+                    startActivity(new Intent(SignIn.this, MainActivity.class));
+                    finish();
+                } else
+                    Toast.makeText(SignIn.this, "Please verify your Email", Toast.LENGTH_SHORT).show();
+            } else {
+                Log.w("TAG", "signInUserWithEmail:failure", task.getException());
+                if (Objects.requireNonNull(task.getException()).toString().contains("The password is invalid"))
+                    Toast.makeText(SignIn.this, "Wrong Password", Toast.LENGTH_SHORT).show();
+                else if (Objects.requireNonNull(task.getException()).toString().contains("There is no user record corresponding to this identifier")) {
+                    Toast.makeText(SignIn.this, "User does not exist. Please create new account", Toast.LENGTH_SHORT).show();
                 }
 
-                else {
-                    Log.w("TAG", "signInUserWithEmail:failure", task.getException());
-                    if (Objects.requireNonNull(task.getException()).toString().contains("The password is invalid"))
-                        Toast.makeText(SignIn.this, "Wrong Password",Toast.LENGTH_SHORT).show();
-                    else if (Objects.requireNonNull(task.getException()).toString().contains("There is no user record corresponding to this identifier")) {
-                        Toast.makeText(SignIn.this, "User does not exist. Please create new account", Toast.LENGTH_SHORT).show();
-                    }
-
-                }
-                pgbar.setVisibility(View.GONE);
+            }
+            pgbar.setVisibility(View.GONE);
         });
+    }
+
+    private boolean fieldsValidation() {
+        Matcher matcher = pattern.matcher(emailId);
+        boolean flag = false;
+
+        // checks if email field is empty
+        if (TextUtils.isEmpty(emailId)) {
+            email.setError("Email Required");
+            email.requestFocus();
+            flag = true;
+            return flag;
+        }
+
+        // checks if valid email is entered
+        if (!matcher.matches()) {
+            email.setError("Please enter valid email");
+            email.requestFocus();
+            flag = true;
+            return flag;
+        }
+
+        // checks if password field is empty
+        if (TextUtils.isEmpty(password)) {
+            pass.setError("Password Required");
+            pass.requestFocus();
+            flag = true;
+            return flag;
+        }
+
+        // checks if password length is greater than 8
+        if (password.length() < 8) {
+            pass.setError("Password should be of at least 8 characters");
+            pass.requestFocus();
+            flag = true;
+            return flag;
+        }
+        return flag;
     }
 }

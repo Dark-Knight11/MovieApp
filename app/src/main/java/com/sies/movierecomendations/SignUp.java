@@ -15,6 +15,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.Objects;
 import java.util.regex.Matcher;
@@ -26,8 +27,10 @@ public class SignUp extends AppCompatActivity {
     TextView signin;
     Button register;
     ProgressBar pgbar;
-    private FirebaseAuth mAuth;
     private String Name, emailId, pass;
+
+    private FirebaseAuth mAuth;
+
     private Handler mHandler = new Handler();
 
     // Email validation regex pattern
@@ -62,58 +65,50 @@ public class SignUp extends AppCompatActivity {
 
             Matcher matcher = pattern.matcher(emailId);
 
+            // checks if name field is empty
             if(TextUtils.isEmpty(Name)) {
                 name.setError("Name Required");
                 name.requestFocus();
                 return;
             }
 
-            if(TextUtils.isEmpty(emailId)) {
+            // checks if email field is empty
+            if (TextUtils.isEmpty(emailId)) {
                 email.setError("Email Required");
                 email.requestFocus();
                 return;
             }
 
+            // checks if valid email is entered
             if (!matcher.matches()) {
                 email.setError("Please enter valid email");
                 email.requestFocus();
                 return;
             }
 
-            if(TextUtils.isEmpty(pass)) {
+            // checks if password field is empty
+            if (TextUtils.isEmpty(pass)) {
                 password.setError("Password Required");
                 password.requestFocus();
                 return;
             }
 
-            if(password.length() < 8) {
-                password.setError("Password should be of atleast 8 characters");
+            // checks if password length is greater than 8
+            if (pass.length() < 8) {
+                password.setError("Password should be of at least 8 characters");
+                password.requestFocus();
                 return;
             }
-
             pgbar.setVisibility(View.VISIBLE);
+
             Sign_Up();
         });
     }
     private void Sign_Up() {
         mAuth.createUserWithEmailAndPassword(emailId, pass)
                 .addOnCompleteListener(this, task -> {
-                    if (task.isSuccessful()) {
-                        Objects.requireNonNull(mAuth.getCurrentUser()).sendEmailVerification().addOnCompleteListener(this, work -> {
-                            if(work.isSuccessful()) {
-                                // Sign in success, update UI with the signed-in user's information
-                                Toast.makeText(SignUp.this, "Please Check your Email for Verification link",Toast.LENGTH_SHORT).show();
-                                startActivity(new Intent(SignUp.this, SignIn.class));
-                                finish();
-                            }else {
-                                // If sign in fails, display a message to the user.
-                                Log.w("TAG", "createUserWithEmail:failure", task.getException());
-                                Toast.makeText(SignUp.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
-                                pgbar.setVisibility(View.GONE);
-                            }
-                        });
-
-                    } else {
+                    if (task.isSuccessful()) sendEmail();
+                    else {
                         // If sign in fails, display a message to the user.
                         Log.w("TAG", "createUserWithEmail:failure", task.getException());
                         if(Objects.requireNonNull(task.getException()).toString().contains("The email address is already in use by another account")) {
@@ -127,5 +122,36 @@ public class SignUp extends AppCompatActivity {
                         pgbar.setVisibility(View.GONE);
                     }
                 });
+    }
+
+    private void sendEmail() {
+        mAuth.getCurrentUser().sendEmailVerification().addOnCompleteListener(task1 -> {
+            if(task1.isSuccessful()) {
+                Toast.makeText(SignUp.this, "Please Check your Email for Verification link",Toast.LENGTH_SHORT).show();
+                enterData();
+            } else {
+                // If sign up fails, display a message to the user.
+                Log.w("TAG", "createUserWithEmail:failure", task1.getException());
+                Toast.makeText(SignUp.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
+                pgbar.setVisibility(View.GONE);
+            }
+        });
+    }
+
+    private void enterData() {
+        User user = new User(Name, emailId);
+        FirebaseDatabase.getInstance().getReference("Users")
+                .child(mAuth.getCurrentUser().getUid())
+                .setValue(user)
+                .addOnCompleteListener(task2 -> {
+            if(task2.isSuccessful()) {
+                Log.i("TAG", "onComplete: congo");
+                startActivity(new Intent(SignUp.this, SignIn.class));
+                finish();
+            } else {
+                Log.w("TAG", "saveUserDetails:failure", task2.getException());
+                pgbar.setVisibility(View.GONE);
+            }
+        });
     }
 }
