@@ -17,6 +17,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.Objects;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class SignUp extends AppCompatActivity {
 
@@ -27,6 +29,10 @@ public class SignUp extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private String Name, emailId, pass;
     private Handler mHandler = new Handler();
+
+    // Email validation regex pattern
+    private final String regex = "^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$";
+    private final Pattern pattern = Pattern.compile(regex);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +49,10 @@ public class SignUp extends AppCompatActivity {
         // Initialize Firebase Auth
         mAuth = FirebaseAuth.getInstance();
 
-        signin.setOnClickListener(v -> startActivity(new Intent(SignUp.this, SignIn.class)));
+        signin.setOnClickListener(v -> {
+            startActivity(new Intent(SignUp.this, SignIn.class));
+            finish();
+        });
 
         register.setOnClickListener(v -> {
 
@@ -51,21 +60,32 @@ public class SignUp extends AppCompatActivity {
             pass = password.getText().toString().trim();
             emailId = email.getText().toString().trim();
 
+            Matcher matcher = pattern.matcher(emailId);
+
             if(TextUtils.isEmpty(Name)) {
                 name.setError("Name Required");
                 name.requestFocus();
                 return;
             }
+
             if(TextUtils.isEmpty(emailId)) {
                 email.setError("Email Required");
                 email.requestFocus();
                 return;
             }
+
+            if (!matcher.matches()) {
+                email.setError("Please enter valid email");
+                email.requestFocus();
+                return;
+            }
+
             if(TextUtils.isEmpty(pass)) {
                 password.setError("Password Required");
                 password.requestFocus();
                 return;
             }
+
             if(password.length() < 8) {
                 password.setError("Password should be of atleast 8 characters");
                 return;

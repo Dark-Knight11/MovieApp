@@ -2,7 +2,6 @@ package com.sies.movierecomendations;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -23,13 +22,12 @@ import java.util.regex.Pattern;
 
 public class SignIn extends AppCompatActivity {
 
-    EditText email,pass;
+    EditText email, pass;
     TextView signup, forgot;
     Button login;
     ProgressBar pgbar;
     private FirebaseAuth mAuth;
     private String emailId, password;
-    private final Handler mHandler = new Handler();
 
     // Email validation regex pattern
     private final String regex = "^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$";
