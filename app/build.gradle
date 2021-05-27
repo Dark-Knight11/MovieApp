@@ -10,6 +10,7 @@ android {
     defaultConfig {
         applicationId "com.sies.movierecomendations"
         minSdkVersion 19
+        multiDexEnabled true
         targetSdkVersion 30
         versionCode 1
         versionName "1.0"
@@ -53,6 +54,15 @@ dependencies {
     // Declare the dependency for the Realtime Database library
     // When using the BoM, you don't specify versions in Firebase library dependencies
     implementation 'com.google.firebase:firebase-database:20.0.0'
+
+    implementation 'de.hdodenhof:circleimageview:3.1.0'
+
+    implementation 'com.github.CanHub:Android-Image-Cropper:3.1.1'
+
+    implementation 'androidx.multidex:multidex:2.0.1'
+
+
+
 //    def paging_version = "3.0.0"
 //    implementation "androidx.paging:paging-runtime-ktx:$paging_version"
 //    // RxJava3 support for paging library

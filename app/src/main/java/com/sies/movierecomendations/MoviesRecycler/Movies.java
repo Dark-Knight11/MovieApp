@@ -40,7 +40,6 @@ public class Movies extends AppCompatActivity {
 
         Intent intent = getIntent();
         int value = intent.getIntExtra("genreId", 12);
-//        Toast.makeText(Movies.this, Integer.toString(value), Toast.LENGTH_SHORT).show();
         getApi(value);
 
         moviesRecyclerView = findViewById(R.id.recyclerView);

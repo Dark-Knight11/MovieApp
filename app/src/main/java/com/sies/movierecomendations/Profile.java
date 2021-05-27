@@ -1,6 +1,8 @@
 package com.sies.movierecomendations;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
@@ -10,11 +12,14 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
+import com.canhub.cropper.CropImage;
+import com.canhub.cropper.CropImageView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -31,11 +36,12 @@ import java.util.Map;
 public class Profile extends AppCompatActivity {
 
     // Variables
-    private static final int PICK_IMAGE_REQUEST = 22;
-    private Uri filePath;
+    private static final int PICK_IMAGE_REQUEST = 43;
+    private static final int PERMISSION_FILE = 23;
+    private Uri resultUri;
     private EditText nameF, phoneF, emailF;
     private String name, phone, email;
-    private ImageView pfp;
+    private de.hdodenhof.circleimageview.CircleImageView pfp;
     private Button logout, update, select, upload;
 
     /* FIREBASE Initializations */
@@ -47,19 +53,18 @@ public class Profile extends AppCompatActivity {
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference mDatabase = database.getReference();
 
-    // get image storage
+    // get image from storage
     FirebaseStorage storage = FirebaseStorage.getInstance();
-    StorageReference storageRef = storage.getReference();
+    StorageReference pathReference = storage.getReference().child("images/" + person.getUid());
+
+    public StorageReference getPath() {
+        return pathReference;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
-
-        if(networkWhere()) {
-            download();     // get the pfp from DB
-            fetchDB();      // get user data
-        }
 
         // assign views to variables
         nameF = findViewById(R.id.name);
@@ -70,6 +75,14 @@ public class Profile extends AppCompatActivity {
         select = findViewById(R.id.select);
         upload = findViewById(R.id.upload);
         pfp = findViewById(R.id.pfp);
+
+        if(networkWhere()) {
+            download();     // get the pfp from DB
+            fetchDB();      // get user data
+        }
+
+        pfp.setOnClickListener(v -> startActivity(new Intent(Profile.this, FullScreenPFP.class)));
+
 
         // logs out the current user
         logout.setOnClickListener(v -> {
@@ -89,7 +102,12 @@ public class Profile extends AppCompatActivity {
         }
 
         // select image for pfp
-        select.setOnClickListener(v -> SelectImage());
+        select.setOnClickListener(v -> {
+            if(ContextCompat.checkSelfPermission(Profile.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)!= PackageManager.PERMISSION_GRANTED)
+                ActivityCompat.requestPermissions(Profile.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},PERMISSION_FILE);
+            else
+                SelectImage();
+        });
 
         // upload image on firebase
         if(networkWhere())
@@ -122,10 +140,8 @@ public class Profile extends AppCompatActivity {
     }
 
     // function for downloading image from firebase and setting it as pfp
-    private void download() {
+    public void download() {
         // Create a reference with an initial file path and name
-        StorageReference pathReference = storageRef.child("images/" + person.getUid());
-
         long MAXBYTES = 1024*1024;
         pathReference.getBytes(MAXBYTES).addOnSuccessListener(bytes -> {
             Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
@@ -140,7 +156,7 @@ public class Profile extends AppCompatActivity {
         childUpdates.put("Name", name);
         childUpdates.put("Email", email);
         mDatabase.child("Users").child(person.getUid()).updateChildren(childUpdates);
-        Toast.makeText(Profile.this, "Data was successfull updated", Toast.LENGTH_SHORT).show();
+        Toast.makeText(Profile.this, "Data was successfully updated", Toast.LENGTH_SHORT).show();
     }
 
     // function for selecting image from gallery
@@ -148,8 +164,8 @@ public class Profile extends AppCompatActivity {
         // Defining Implicit Intent to mobile gallery
         Intent intent = new Intent();
         intent.setType("image/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(intent, PICK_IMAGE_REQUEST);
+        intent.setAction(Intent.ACTION_PICK);
+        startActivityForResult(Intent.createChooser(intent, "Profile Pic"), PICK_IMAGE_REQUEST);
     }
 
     // reads the image selected by user
@@ -164,23 +180,36 @@ public class Profile extends AppCompatActivity {
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
 
             // Get the Uri of data
-            filePath = data.getData();
-            pfp.setImageURI(filePath);
+//            filePath = data.getData();
+            CropImage.activity(data.getData())
+                    .setGuidelines(CropImageView.Guidelines.ON)
+                    .setCropShape(CropImageView.CropShape.OVAL)
+                    .setFixAspectRatio(true)
+                    .start(this);
+        }
+        else if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+            CropImage.ActivityResult result = CropImage.getActivityResult(data);
+            if (resultCode == RESULT_OK) {
+                resultUri = result.getUriContent();
+                pfp.setImageURI(resultUri);
+            } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+                Exception error = result.getError();
+                Toast.makeText(Profile.this, error.getMessage(), Toast.LENGTH_SHORT).show();
+            }
         }
     }
 
     // function for uploading image in firebase
     private void upload() {
-        if(filePath!=null) {
-            final String key = person.getUid();
-            StorageReference profilePic = storageRef.child("images/" + key);
-            profilePic.putFile(filePath)
+        if(resultUri!=null) {
+            pathReference.putFile(resultUri)
                     .addOnSuccessListener(taskSnapshot ->
                             Toast.makeText(Profile.this, "Image was uploaded", Toast.LENGTH_SHORT).show())
                     .addOnFailureListener(e ->
                             Toast.makeText(Profile.this, e.getMessage(), Toast.LENGTH_SHORT).show());
         } else
             Toast.makeText(Profile.this, "Please Select an Image", Toast.LENGTH_SHORT).show();
+        resultUri = null;
     }
 
     // checks for Internet Connectivity
@@ -203,5 +232,4 @@ public class Profile extends AppCompatActivity {
         }
         return have_MobileData || have_WIFI;
     }
-
 }

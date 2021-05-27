@@ -12,10 +12,18 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.sies.movierecomendations.MoviesApi.MoviesList;
 import com.sies.movierecomendations.R;
 
 public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.ViewHolder> {
+
+    FirebaseDatabase database = FirebaseDatabase.getInstance();
+    DatabaseReference mDatabase = database.getReference();
+    FirebaseUser person = FirebaseAuth.getInstance().getCurrentUser();
 
     MoviesList res;
     int count = 0;
@@ -33,7 +41,7 @@ public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.View
     @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull MovieListAdapter.ViewHolder holder, int position) {
-        Glide.with(holder.itemView.getContext()).load("https://image.tmdb.org/t/p/w500"+ res.getResults().get(position).getBackdrop_path()).into(holder.poster);
+        Glide.with(holder.itemView.getContext()).load("https://image.tmdb.org/t/p/original"+ res.getResults().get(position).getBackdrop_path()).into(holder.poster);
         holder.title.setText(res.getResults().get(position).getTitle());
         holder.desc.setText(res.getResults().get(position).getOverview());
         holder.frame.setOnClickListener(v -> {
@@ -42,13 +50,16 @@ public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.View
             count++;
         });
         holder.date.setText("Release Date: " + res.getResults().get(position).getRelease_date());
+
+//        Map<String, Object> childUpdates = new HashMap<>();
+//        childUpdates.put("id", res.getResults().get(position).getId());
+//        mDatabase.child("Users").child(person.getUid()).child("favourites").updateChildren(childUpdates);
     }
 
     @Override
     public int getItemCount() {
         return res.getResults().size();
     }
-
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         private ImageView poster;

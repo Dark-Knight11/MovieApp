@@ -15,13 +15,13 @@
             tools:ignore="VectorRaster" />
 
         <group
-            android:translateX="0.409"
-            android:translateY="0.057"
+            android:translateX="0.493"
+            android:translateY="-0.144"
             android:pivotX="180"
             android:pivotY="320"
-            android:scaleX="2.113"
-            android:scaleY="1.405"
-            android:rotation="38.067"
+            android:scaleX="2.809"
+            android:scaleY="2.071"
+            android:rotation="44.594"
             >
 
             <path
@@ -37,11 +37,6 @@
                         android:endX="270"
                         android:endY="320"
                         >
-
-                        <item
-                            android:color="#112239"
-                            android:offset="0"
-                            />
 
                         <item
                             android:color="#1E2E44"
