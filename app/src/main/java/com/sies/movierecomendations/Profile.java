@@ -141,9 +141,9 @@ public class Profile extends AppCompatActivity {
 
     // function for downloading image from firebase and setting it as pfp
     public void download() {
-        // Create a reference with an initial file path and name
-        long MAXBYTES = 1024*1024;
+        long MAXBYTES = 4096*4096;
         pathReference.getBytes(MAXBYTES).addOnSuccessListener(bytes -> {
+            Log.i("TAG", "firebaseImageDwl: ");
             Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
             pfp.setImageBitmap(bitmap);
         }).addOnFailureListener(Throwable::printStackTrace);

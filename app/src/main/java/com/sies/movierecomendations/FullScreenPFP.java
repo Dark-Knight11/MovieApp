@@ -16,7 +16,7 @@ public class FullScreenPFP extends AppCompatActivity {
         ImageView imageView = findViewById(R.id.imageView);
 
         Profile profile = new Profile();
-        long MAXBYTES = 1024*1024;
+        long MAXBYTES = 4096*4096;
         profile.getPath().getBytes(MAXBYTES).addOnSuccessListener(bytes -> {
             Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
             imageView.setImageBitmap(bitmap);

@@ -74,7 +74,7 @@ public class SignIn extends AppCompatActivity {
                 emailId = email.getText().toString().trim();
                 password = pass.getText().toString().trim();
 
-                if (fieldsValidation()) return;
+                if (!fieldsValidation()) return;
 
                 mAuth.signInWithEmailAndPassword(emailId, password).addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
