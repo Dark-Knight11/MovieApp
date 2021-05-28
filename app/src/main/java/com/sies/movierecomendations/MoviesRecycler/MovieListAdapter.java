@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -19,6 +20,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.sies.movierecomendations.MoviesApi.MoviesList;
 import com.sies.movierecomendations.R;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.ViewHolder> {
 
     FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -26,7 +30,7 @@ public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.View
     FirebaseUser person = FirebaseAuth.getInstance().getCurrentUser();
 
     MoviesList res;
-    int count = 0;
+    int count = 0, fav = 0;
     public MovieListAdapter (MoviesList res) {
         this.res = res;
     }
@@ -50,7 +54,16 @@ public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.View
             count++;
         });
         holder.date.setText("Release Date: " + res.getResults().get(position).getRelease_date());
-
+        holder.star.setOnClickListener(v -> {
+            if(fav%2==0) {
+                holder.star.setImageResource(R.drawable.ic_baseline_star_rate_24);
+                Map<String, Object> childUpdates = new HashMap<>();
+                childUpdates.put("id", res.getResults().get(position).getId());
+                mDatabase.child("Users").child(person.getUid()).child("favourites").updateChildren(childUpdates);
+            }
+            else holder.star.setImageResource(R.drawable.ic_baseline_star_outline_24);
+            fav++;
+        });
 //        Map<String, Object> childUpdates = new HashMap<>();
 //        childUpdates.put("id", res.getResults().get(position).getId());
 //        mDatabase.child("Users").child(person.getUid()).child("favourites").updateChildren(childUpdates);
@@ -67,6 +80,7 @@ public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.View
         private TextView desc;
         private TextView date;
         private RelativeLayout frame;
+        private ImageButton star;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             poster = itemView.findViewById(R.id.image);
@@ -74,6 +88,7 @@ public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.View
             desc = itemView.findViewById(R.id.description);
             date = itemView.findViewById(R.id.releaseDate);
             frame = itemView.findViewById(R.id.frame);
+            star = itemView.findViewById(R.id.star);
         }
 
     }

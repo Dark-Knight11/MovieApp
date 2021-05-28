@@ -1,6 +1,9 @@
 package com.sies.movierecomendations;
 
+import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.TextUtils;
@@ -33,14 +36,21 @@ public class SignUp extends AppCompatActivity {
 
     private Handler mHandler = new Handler();
 
+    SharedPreferences sharedPreferences;
+    SharedPreferences.Editor editor;
+
     // Email validation regex pattern
     private final String regex = "^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$";
     private final Pattern pattern = Pattern.compile(regex);
 
+    @SuppressLint("CommitPrefEdits")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
+
+        sharedPreferences = getSharedPreferences("com.sies.cinemania.PREFERENCE_FILE_KEY", Context.MODE_PRIVATE);
+        editor = sharedPreferences.edit();
 
         name = findViewById(R.id.name);
         email = findViewById(R.id.email);
@@ -51,7 +61,6 @@ public class SignUp extends AppCompatActivity {
 
         // Initialize Firebase Auth
         mAuth = FirebaseAuth.getInstance();
-
 
         signin.setOnClickListener(v -> {
             startActivity(new Intent(SignUp.this, SignIn.class));
@@ -128,7 +137,7 @@ public class SignUp extends AppCompatActivity {
     private void sendEmail() {
         Objects.requireNonNull(mAuth.getCurrentUser()).sendEmailVerification().addOnCompleteListener(task1 -> {
             if(task1.isSuccessful()) {
-                Toast.makeText(SignUp.this, "Please Check your Email for Verification link",Toast.LENGTH_SHORT).show();
+                Toast.makeText(SignUp.this, "Please Check your Email for Verification link", Toast.LENGTH_SHORT).show();
                 enterData();
             } else {
                 // If sign up fails, display a message to the user.
@@ -147,6 +156,9 @@ public class SignUp extends AppCompatActivity {
                 .addOnCompleteListener(task2 -> {
             if(task2.isSuccessful()) {
                 Log.i("TAG", "onComplete: congo");
+                editor.putString("name", Name);
+                editor.putString("email", emailId);
+                editor.commit();
                 startActivity(new Intent(SignUp.this, SignIn.class));
                 finish();
             } else {

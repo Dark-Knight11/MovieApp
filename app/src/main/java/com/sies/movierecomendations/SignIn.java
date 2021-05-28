@@ -1,6 +1,12 @@
 package com.sies.movierecomendations;
 
+import android.annotation.SuppressLint;
+import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -17,8 +23,18 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.sies.movierecomendations.GenreRecycler.MainActivity;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -32,14 +48,30 @@ public class SignIn extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private String emailId, password;
 
+    SharedPreferences sharedPreferences;
+    SharedPreferences.Editor editor;
+    ContextWrapper cw;
+
+    FirebaseUser person;
+    // get realtime DB
+    FirebaseDatabase database;
+    DatabaseReference mDatabase;
+
+    // get image from storage
+    FirebaseStorage storage;
+
     // Email validation regex pattern
     private final String regex = "^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$";
     private final Pattern pattern = Pattern.compile(regex);
 
+    @SuppressLint("CommitPrefEdits")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
+
+        sharedPreferences = getSharedPreferences("com.sies.cinemania.PREFERENCE_FILE_KEY", Context.MODE_PRIVATE);
+        editor = sharedPreferences.edit();
 
         if(!networkWhere())
             Toast.makeText(SignIn.this, "No Internet Found", Toast.LENGTH_SHORT).show();
@@ -47,10 +79,12 @@ public class SignIn extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         FirebaseUser user = mAuth.getCurrentUser();
 
+        // CHECKS IF USER IS ALREADY LOGGED IN
         if (user != null && user.isEmailVerified()) {
             Toast.makeText(SignIn.this, "You are Logged in", Toast.LENGTH_SHORT).show();
             startActivity(new Intent(SignIn.this, MainActivity.class));
             finish();
+
         } else {
             email = findViewById(R.id.email);
             pass = findViewById(R.id.password);
@@ -60,16 +94,19 @@ public class SignIn extends AppCompatActivity {
             login = findViewById(R.id.login);
             pgbar = findViewById(R.id.progressBar);
 
+            // redirects to signUp page
             signup.setOnClickListener(v -> {
                 startActivity(new Intent(SignIn.this, SignUp.class));
                 finish();
             });
 
+            // redirects to forgot password page
             forgot.setOnClickListener(v -> {
                 startActivity(new Intent(SignIn.this, ForgotPassword.class));
                 finish();
             });
 
+            // resends verification email
             resend.setOnClickListener(v -> {
                 emailId = email.getText().toString().trim();
                 password = pass.getText().toString().trim();
@@ -100,6 +137,7 @@ public class SignIn extends AppCompatActivity {
 
             });
 
+            // logs in the user
             login.setOnClickListener(v -> {
                 emailId = email.getText().toString().trim();
                 password = pass.getText().toString().trim();
@@ -115,10 +153,22 @@ public class SignIn extends AppCompatActivity {
         }
     }
 
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
+/*---------------------------------------------------------------FUNCTIONS------------------------------------------------------------*/
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
+
+    // function for starting firebase authentication
     private void Sign_In() {
         mAuth.signInWithEmailAndPassword(emailId, password).addOnCompleteListener(this, task -> {
             if (task.isSuccessful()) {
                 if (Objects.requireNonNull(mAuth.getCurrentUser()).isEmailVerified()) {
+                    cw = new ContextWrapper(getApplicationContext());
+                    person = FirebaseAuth.getInstance().getCurrentUser();
+                    database = FirebaseDatabase.getInstance();
+                    mDatabase = database.getReference();
+                    storage = FirebaseStorage.getInstance();
+                    StoreImage();
+                    fbData();
                     Toast.makeText(SignIn.this, "You are logged in", Toast.LENGTH_SHORT).show();
                     startActivity(new Intent(SignIn.this, MainActivity.class));
                     finish();
@@ -137,6 +187,52 @@ public class SignIn extends AppCompatActivity {
         });
     }
 
+    public void fbData() {
+        ValueEventListener postListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if(dataSnapshot.exists()) {
+                    // Get Post object and use the values to update the UI
+                    User user = dataSnapshot.getValue(User.class);
+                    assert user != null;
+                    // see under onCreate about the editor settings
+                    editor.putString("name", user.Name);
+                    editor.putString("phone", user.phone);
+                    editor.putString("email", user.Email);
+                    editor.commit();
+
+                } else
+                    Toast.makeText(SignIn.this, "Data not present", Toast.LENGTH_SHORT).show();
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                // Getting Post failed, log a message
+                Log.w("TAG", "loadPost:onCancelled", databaseError.toException());
+            }
+        };
+        mDatabase.child("Users").child(person.getUid()).addValueEventListener(postListener);
+    }
+
+    private void StoreImage() {
+        StorageReference pathReference = storage.getReference().child("images/" + person.getUid());
+        long MAXBYTES = 4096*4096;
+        pathReference.getBytes(MAXBYTES).addOnSuccessListener(bytes -> {
+            Log.i("TAG", "firebaseImageDwl: ");
+            Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+            File directory = cw.getDir("CineMania", Context.MODE_PRIVATE);
+            File mypath = new File(directory,"profile.jpg");
+            FileOutputStream fos;
+            try {
+                fos = new FileOutputStream(mypath);
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);
+                fos.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }).addOnFailureListener(Throwable::printStackTrace);
+    }
+
+    // function for validating all input fields
     private boolean fieldsValidation() {
         Matcher matcher = pattern.matcher(emailId);
         boolean flag = true;
@@ -175,6 +271,7 @@ public class SignIn extends AppCompatActivity {
         return flag;
     }
 
+    // function to check if internet is active
     private boolean networkWhere() {
 
         boolean have_WIFI = false;
