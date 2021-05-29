@@ -189,7 +189,6 @@ public class SignIn extends AppCompatActivity {
                     if (task.isSuccessful()) {
                         Map<String, Object> document = task.getResult().getData();
                         Log.d("TAG", task.getResult().getId()+ " => " + document);
-                        Toast.makeText(SignIn.this, document.get("Name") +" "+document.get("phone")+" "+document.get("Email"), Toast.LENGTH_SHORT).show();
                         editor.putString("name", document.get("Name").toString());
                         editor.putString("phone", document.get("phone").toString());
                         editor.putString("email", document.get("Email").toString());
