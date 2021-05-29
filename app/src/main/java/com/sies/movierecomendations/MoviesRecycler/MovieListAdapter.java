@@ -45,7 +45,7 @@ public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.View
     @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull MovieListAdapter.ViewHolder holder, int position) {
-        Glide.with(holder.itemView.getContext()).load("https://image.tmdb.org/t/p/original"+ res.getResults().get(position).getBackdrop_path()).into(holder.poster);
+        Glide.with(holder.itemView.getContext()).load("https://image.tmdb.org/t/p/w500"+ res.getResults().get(position).getBackdrop_path()).into(holder.poster);
         holder.title.setText(res.getResults().get(position).getTitle());
         holder.desc.setText(res.getResults().get(position).getOverview());
         holder.frame.setOnClickListener(v -> {

@@ -70,9 +70,6 @@ public class SignIn extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
 
-        sharedPreferences = getSharedPreferences("com.sies.cinemania.PREFERENCE_FILE_KEY", Context.MODE_PRIVATE);
-        editor = sharedPreferences.edit();
-
         if(!networkWhere())
             Toast.makeText(SignIn.this, "No Internet Found", Toast.LENGTH_SHORT).show();
 
@@ -86,6 +83,8 @@ public class SignIn extends AppCompatActivity {
             finish();
 
         } else {
+            sharedPreferences = getSharedPreferences("com.sies.cinemania.PREFERENCE_FILE_KEY", Context.MODE_PRIVATE);
+            editor = sharedPreferences.edit();
             email = findViewById(R.id.email);
             pass = findViewById(R.id.password);
             signup = findViewById(R.id.signup);
@@ -113,6 +112,7 @@ public class SignIn extends AppCompatActivity {
 
                 if (!fieldsValidation()) return;
 
+                pgbar.setVisibility(View.VISIBLE);
                 mAuth.signInWithEmailAndPassword(emailId, password).addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         mAuth.getCurrentUser().sendEmailVerification().addOnCompleteListener(task1 -> {
@@ -121,8 +121,7 @@ public class SignIn extends AppCompatActivity {
                             else {
                                 // If sign up fails, display a message to the user.
                                 Log.w("TAG", "createUserWithEmail:failure", task1.getException());
-                                Toast.makeText(SignIn.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
-                                pgbar.setVisibility(View.GONE);
+                                Toast.makeText(SignIn.this, "Email not Sent.", Toast.LENGTH_SHORT).show();
                             }
                         });
                     } else {
@@ -133,6 +132,7 @@ public class SignIn extends AppCompatActivity {
                             Toast.makeText(SignIn.this, "User does not exist. Please create new account", Toast.LENGTH_SHORT).show();
 
                     }
+                    pgbar.setVisibility(View.GONE);
                 });
 
             });
@@ -181,7 +181,6 @@ public class SignIn extends AppCompatActivity {
                 else if (Objects.requireNonNull(task.getException()).toString().contains("There is no user record corresponding to this identifier")) {
                     Toast.makeText(SignIn.this, "User does not exist. Please create new account", Toast.LENGTH_SHORT).show();
                 }
-
             }
             pgbar.setVisibility(View.GONE);
         });
@@ -191,9 +190,9 @@ public class SignIn extends AppCompatActivity {
         ValueEventListener postListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                User user = dataSnapshot.getValue(User.class);
                 if(dataSnapshot.exists()) {
                     // Get Post object and use the values to update the UI
-                    User user = dataSnapshot.getValue(User.class);
                     assert user != null;
                     // see under onCreate about the editor settings
                     editor.putString("name", user.Name);
@@ -201,8 +200,13 @@ public class SignIn extends AppCompatActivity {
                     editor.putString("email", user.Email);
                     editor.commit();
 
-                } else
+                } else {
+                    editor.putString("name", user.Name);
+                    editor.putString("phone", user.phone);
+                    editor.putString("email", user.Email);
+                    editor.commit();
                     Toast.makeText(SignIn.this, "Data not present", Toast.LENGTH_SHORT).show();
+                }
             }
             @Override
             public void onCancelled(DatabaseError databaseError) {
@@ -215,24 +219,40 @@ public class SignIn extends AppCompatActivity {
 
     private void StoreImage() {
         StorageReference pathReference = storage.getReference().child("images/" + person.getUid());
-        long MAXBYTES = 4096*4096;
-        pathReference.getBytes(MAXBYTES).addOnSuccessListener(bytes -> {
-            Log.i("TAG", "firebaseImageDwl: ");
-            Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+        pathReference.getDownloadUrl().addOnFailureListener(e -> {
+            Bitmap bm = BitmapFactory.decodeResource( getResources(), R.drawable.default_pfp);
             File directory = cw.getDir("CineMania", Context.MODE_PRIVATE);
-            File mypath = new File(directory,"profile.jpg");
+            File mypath = new File(directory, "profile.jpg");
             FileOutputStream fos;
             try {
                 fos = new FileOutputStream(mypath);
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);
+                bm.compress(Bitmap.CompressFormat.JPEG, 100, fos);
+                fos.flush();
                 fos.close();
-            } catch (IOException e) {
-                e.printStackTrace();
+            } catch (IOException z) {
+                z.printStackTrace();
             }
-        }).addOnFailureListener(Throwable::printStackTrace);
+        }).addOnSuccessListener(uri -> {
+            long MAXBYTES = 4096 * 4096;
+            pathReference.getBytes(MAXBYTES).addOnSuccessListener(bytes -> {
+                Log.i("TAG", "firebaseImageDwl: ImageDownloaded");
+                Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                File directory = cw.getDir("CineMania", Context.MODE_PRIVATE);
+                File mypath = new File(directory, "profile.jpg");
+                FileOutputStream fos;
+                try {
+                    fos = new FileOutputStream(mypath);
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);
+                    fos.flush();
+                    fos.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            });
+        });
     }
 
-    // function for validating all input fields
+                // function for validating all input fields
     private boolean fieldsValidation() {
         Matcher matcher = pattern.matcher(emailId);
         boolean flag = true;
