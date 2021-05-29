@@ -28,8 +28,6 @@ import com.canhub.cropper.CropImage;
 import com.canhub.cropper.CropImageView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -62,10 +60,7 @@ public class Profile extends AppCompatActivity {
     // get user
     FirebaseUser person = FirebaseAuth.getInstance().getCurrentUser();
 
-    // get realtime DB
-    FirebaseDatabase database = FirebaseDatabase.getInstance();
-    DatabaseReference mDatabase = database.getReference();
-
+    // get Firestore Instance
     FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     // get image from storage

@@ -41,6 +41,7 @@ public class SignUp extends AppCompatActivity {
     SharedPreferences sharedPreferences;
     SharedPreferences.Editor editor;
 
+    // get Firestore Instance
     FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     // Email validation regex pattern
@@ -152,6 +153,7 @@ public class SignUp extends AppCompatActivity {
         });
     }
 
+    // function for uploading data on Firestore
     private void enterData() {
 
         Map<String, Object> userData = new HashMap<>();
@@ -167,24 +169,26 @@ public class SignUp extends AppCompatActivity {
                 .addOnFailureListener(e -> Log.w("TAG", "Error adding document", e));
         pgbar.setVisibility(View.GONE);
         startActivity(new Intent(SignUp.this, SignIn.class));
-
-
-//        User user = new User(emailId, Name);
-//        FirebaseDatabase.getInstance().getReference("Users")
-//                .child(Objects.requireNonNull(mAuth.getCurrentUser()).getUid())
-//                .setValue(user)
-//                .addOnCompleteListener(task2 -> {
-//            if(task2.isSuccessful()) {
-//                Log.i("TAG", "onComplete: congo");
-//                editor.putString("name", Name);
-//                editor.putString("email", emailId);
-//                editor.commit();
-//                startActivity(new Intent(SignUp.this, SignIn.class));
-//                finish();
-//            } else {
-//                Log.w("TAG", "saveUserDetails:failure", task2.getException());
-//                pgbar.setVisibility(View.GONE);
-//            }
-//        });
     }
 }
+
+
+    // function for uploading data on Realtime DB
+/*    User user = new User(emailId, Name);
+    FirebaseDatabase.getInstance().getReference("Users")
+            .child(Objects.requireNonNull(mAuth.getCurrentUser()).getUid())
+            .setValue(user)
+            .addOnCompleteListener(task2 -> {
+        if(task2.isSuccessful()) {
+            Log.i("TAG", "onComplete: congo");
+            editor.putString("name", Name);
+            editor.putString("email", emailId);
+            editor.commit();
+            startActivity(new Intent(SignUp.this, SignIn.class));
+            finish();
+        } else {
+            Log.w("TAG", "saveUserDetails:failure", task2.getException());
+            pgbar.setVisibility(View.GONE);
+        }
+    });
+*/
