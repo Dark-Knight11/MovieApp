@@ -1,6 +1,7 @@
 package com.sies.movierecomendations.MoviesRecycler;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,6 +9,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -31,6 +33,7 @@ public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.View
 
     MoviesList res;
     int count = 0, fav = 0;
+    private Context context;
     public MovieListAdapter (MoviesList res) {
         this.res = res;
     }
@@ -39,6 +42,7 @@ public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.View
     @Override
     public MovieListAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.movie_list, parent, false);
+        context = parent.getContext();
         return new ViewHolder(view);
     }
 
@@ -55,6 +59,9 @@ public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.View
         });
         holder.date.setText("Release Date: " + res.getResults().get(position).getRelease_date());
         holder.star.setOnClickListener(v -> {
+            int pos;
+            pos = position;
+            Toast.makeText(context, Integer.toString(pos), Toast.LENGTH_SHORT).show();
             if(fav%2==0) {
                 holder.star.setImageResource(R.drawable.ic_baseline_star_rate_24);
                 Map<String, Object> childUpdates = new HashMap<>();
