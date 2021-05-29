@@ -153,7 +153,9 @@ public class SignUp extends AppCompatActivity {
         });
     }
 
+    // function for uploading data on Firestore
     private void enterData() {
+
         Map<String, Object> userData = new HashMap<>();
         userData.put("phone", "");
         userData.put("Name", Name);
@@ -169,3 +171,24 @@ public class SignUp extends AppCompatActivity {
         startActivity(new Intent(SignUp.this, SignIn.class));
     }
 }
+
+
+    // function for uploading data on Realtime DB
+/*    User user = new User(emailId, Name);
+    FirebaseDatabase.getInstance().getReference("Users")
+            .child(Objects.requireNonNull(mAuth.getCurrentUser()).getUid())
+            .setValue(user)
+            .addOnCompleteListener(task2 -> {
+        if(task2.isSuccessful()) {
+            Log.i("TAG", "onComplete: congo");
+            editor.putString("name", Name);
+            editor.putString("email", emailId);
+            editor.commit();
+            startActivity(new Intent(SignUp.this, SignIn.class));
+            finish();
+        } else {
+            Log.w("TAG", "saveUserDetails:failure", task2.getException());
+            pgbar.setVisibility(View.GONE);
+        }
+    });
+*/

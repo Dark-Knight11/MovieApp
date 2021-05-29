@@ -45,6 +45,7 @@ public class SignIn extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private String emailId, password;
 
+    // local storage requirements
     SharedPreferences sharedPreferences;
     SharedPreferences.Editor editor;
     ContextWrapper cw;
@@ -71,7 +72,7 @@ public class SignIn extends AppCompatActivity {
             Toast.makeText(SignIn.this, "No Internet Found", Toast.LENGTH_SHORT).show();
 
         mAuth = FirebaseAuth.getInstance();
-        FirebaseUser person = mAuth.getCurrentUser();
+        person = mAuth.getCurrentUser();
 
         // CHECKS IF USER IS ALREADY LOGGED IN
         if (person != null && person.isEmailVerified()) {
@@ -181,6 +182,7 @@ public class SignIn extends AppCompatActivity {
         });
     }
 
+    // function for fetching data from Firestore DB
     public void fbData() {
         db.collection("Users")
                 .document(person.getUid())
@@ -199,9 +201,13 @@ public class SignIn extends AppCompatActivity {
                 });
     }
 
+    // function for fetching image from firebase and storing it locally
     private void StoreImage() {
+        // gets images from firebase storage
         StorageReference pathReference = storage.getReference().child("images/" + person.getUid());
-        pathReference.getDownloadUrl().addOnFailureListener(e -> {
+        pathReference.getDownloadUrl()
+                // stores default pfp if image not found on Firebase
+                .addOnFailureListener(e -> {
             Bitmap bm = BitmapFactory.decodeResource( getResources(), R.drawable.default_pfp);
             File directory = cw.getDir("CineMania", Context.MODE_PRIVATE);
             File mypath = new File(directory, "profile.jpg");
@@ -214,7 +220,9 @@ public class SignIn extends AppCompatActivity {
             } catch (IOException z) {
                 z.printStackTrace();
             }
-        }).addOnSuccessListener(uri -> {
+        })
+                // stores image fetched from firebase to local storage
+                .addOnSuccessListener(uri -> {
             long MAXBYTES = 4096 * 4096;
             pathReference.getBytes(MAXBYTES).addOnSuccessListener(bytes -> {
                 Log.i("TAG", "firebaseImageDwl: ImageDownloaded");
@@ -234,43 +242,38 @@ public class SignIn extends AppCompatActivity {
         });
     }
 
-                // function for validating all input fields
+    // function for validating all input fields
     private boolean fieldsValidation() {
         Matcher matcher = pattern.matcher(emailId);
-        boolean flag = true;
 
         // checks if email field is empty
         if (TextUtils.isEmpty(emailId)) {
             email.setError("Email Required");
             email.requestFocus();
-            flag = false;
-            return flag;
+            return false;
         }
 
         // checks if valid email is entered
         if (!matcher.matches()) {
             email.setError("Please enter valid email");
             email.requestFocus();
-            flag = false;
-            return flag;
+            return false;
         }
 
         // checks if password field is empty
         if (TextUtils.isEmpty(password)) {
             pass.setError("Password Required");
             pass.requestFocus();
-            flag = false;
-            return flag;
+            return false;
         }
 
         // checks if password length is greater than 8
         if (password.length() < 8) {
             pass.setError("Password should be of at least 8 characters");
             pass.requestFocus();
-            flag = false;
-            return flag;
+            return false;
         }
-        return flag;
+        return true;
     }
 
     // function to check if internet is active
