@@ -18,8 +18,10 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -38,6 +40,9 @@ public class SignUp extends AppCompatActivity {
 
     SharedPreferences sharedPreferences;
     SharedPreferences.Editor editor;
+
+    // get Firestore Instance
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     // Email validation regex pattern
     private final String regex = "^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$";
@@ -117,7 +122,8 @@ public class SignUp extends AppCompatActivity {
     private void Sign_Up() {
         mAuth.createUserWithEmailAndPassword(emailId, pass)
                 .addOnCompleteListener(this, task -> {
-                    if (task.isSuccessful()) sendEmail();
+                    if (task.isSuccessful())
+                        sendEmail();
                     else {
                         // If sign in fails, display a message to the user.
                         Log.w("TAG", "createUserWithEmail:failure", task.getException());
@@ -129,7 +135,6 @@ public class SignUp extends AppCompatActivity {
                             };
                             mHandler.postDelayed(mUpdateTimeTask, 200);
                         }
-                        pgbar.setVisibility(View.GONE);
                     }
                 });
     }
@@ -149,22 +154,18 @@ public class SignUp extends AppCompatActivity {
     }
 
     private void enterData() {
-        User user = new User(emailId, Name);
-        FirebaseDatabase.getInstance().getReference("Users")
-                .child(Objects.requireNonNull(mAuth.getCurrentUser()).getUid())
-                .setValue(user)
-                .addOnCompleteListener(task2 -> {
-            if(task2.isSuccessful()) {
-                Log.i("TAG", "onComplete: congo");
-                editor.putString("name", Name);
-                editor.putString("email", emailId);
-                editor.commit();
-                startActivity(new Intent(SignUp.this, SignIn.class));
-                finish();
-            } else {
-                Log.w("TAG", "saveUserDetails:failure", task2.getException());
-                pgbar.setVisibility(View.GONE);
-            }
-        });
+        Map<String, Object> userData = new HashMap<>();
+        userData.put("phone", "");
+        userData.put("Name", Name);
+        userData.put("Email", emailId);
+
+        // Add a new document with a generated ID
+        db.collection("Users")
+                .document((mAuth.getCurrentUser()).getUid())
+                .set(userData)
+                .addOnSuccessListener(documentReference -> Log.d("TAG", "DocumentSnapshot added with ID: " + (mAuth.getCurrentUser()).getUid()))
+                .addOnFailureListener(e -> Log.w("TAG", "Error adding document", e));
+        pgbar.setVisibility(View.GONE);
+        startActivity(new Intent(SignUp.this, SignIn.class));
     }
 }

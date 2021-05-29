@@ -23,11 +23,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.sies.movierecomendations.GenreRecycler.MainActivity;
@@ -35,6 +31,7 @@ import com.sies.movierecomendations.GenreRecycler.MainActivity;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Map;
 import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -53,9 +50,9 @@ public class SignIn extends AppCompatActivity {
     ContextWrapper cw;
 
     FirebaseUser person;
-    // get realtime DB
-    FirebaseDatabase database;
-    DatabaseReference mDatabase;
+
+    // get Firestore Instance
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     // get image from storage
     FirebaseStorage storage;
@@ -74,10 +71,10 @@ public class SignIn extends AppCompatActivity {
             Toast.makeText(SignIn.this, "No Internet Found", Toast.LENGTH_SHORT).show();
 
         mAuth = FirebaseAuth.getInstance();
-        FirebaseUser user = mAuth.getCurrentUser();
+        FirebaseUser person = mAuth.getCurrentUser();
 
         // CHECKS IF USER IS ALREADY LOGGED IN
-        if (user != null && user.isEmailVerified()) {
+        if (person != null && person.isEmailVerified()) {
             Toast.makeText(SignIn.this, "You are Logged in", Toast.LENGTH_SHORT).show();
             startActivity(new Intent(SignIn.this, MainActivity.class));
             finish();
@@ -163,9 +160,7 @@ public class SignIn extends AppCompatActivity {
             if (task.isSuccessful()) {
                 if (Objects.requireNonNull(mAuth.getCurrentUser()).isEmailVerified()) {
                     cw = new ContextWrapper(getApplicationContext());
-                    person = FirebaseAuth.getInstance().getCurrentUser();
-                    database = FirebaseDatabase.getInstance();
-                    mDatabase = database.getReference();
+                    person = mAuth.getCurrentUser();
                     storage = FirebaseStorage.getInstance();
                     StoreImage();
                     fbData();
@@ -187,34 +182,21 @@ public class SignIn extends AppCompatActivity {
     }
 
     public void fbData() {
-        ValueEventListener postListener = new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                User user = dataSnapshot.getValue(User.class);
-                if(dataSnapshot.exists()) {
-                    // Get Post object and use the values to update the UI
-                    assert user != null;
-                    // see under onCreate about the editor settings
-                    editor.putString("name", user.Name);
-                    editor.putString("phone", user.phone);
-                    editor.putString("email", user.Email);
-                    editor.commit();
-
-                } else {
-                    editor.putString("name", user.Name);
-                    editor.putString("phone", user.phone);
-                    editor.putString("email", user.Email);
-                    editor.commit();
-                    Toast.makeText(SignIn.this, "Data not present", Toast.LENGTH_SHORT).show();
-                }
-            }
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                // Getting Post failed, log a message
-                Log.w("TAG", "loadPost:onCancelled", databaseError.toException());
-            }
-        };
-        mDatabase.child("Users").child(person.getUid()).addValueEventListener(postListener);
+        db.collection("Users")
+                .document(person.getUid())
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        Map<String, Object> document = task.getResult().getData();
+                        Log.d("TAG", task.getResult().getId()+ " => " + document);
+                        editor.putString("name", document.get("Name").toString());
+                        editor.putString("phone", document.get("phone").toString());
+                        editor.putString("email", document.get("Email").toString());
+                        editor.commit();
+                    } else {
+                        Log.w("TAG", "Error getting documents.", task.getException());
+                    }
+                });
     }
 
     private void StoreImage() {

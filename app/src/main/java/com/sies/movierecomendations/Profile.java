@@ -14,6 +14,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -27,8 +28,7 @@ import com.canhub.cropper.CropImage;
 import com.canhub.cropper.CropImageView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
@@ -60,9 +60,8 @@ public class Profile extends AppCompatActivity {
     // get user
     FirebaseUser person = FirebaseAuth.getInstance().getCurrentUser();
 
-    // get realtime DB
-    FirebaseDatabase database = FirebaseDatabase.getInstance();
-    DatabaseReference mDatabase = database.getReference();
+    // get Firestore Instance
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     // get image from storage
     FirebaseStorage storage = FirebaseStorage.getInstance();
@@ -173,11 +172,18 @@ public class Profile extends AppCompatActivity {
         editor.putString("phone", phone);
         editor.putString("email", email);
         editor.commit();
-        Map<String, Object> childUpdates = new HashMap<>();
-        childUpdates.put("phone", phone);
-        childUpdates.put("Name", name);
-        childUpdates.put("Email", email);
-        mDatabase.child("Users").child(person.getUid()).updateChildren(childUpdates);
+
+        Map<String, Object> user = new HashMap<>();
+        user.put("Name", name);
+        user.put("phone", phone);
+        user.put("Email", email);
+
+        // Add a new document with a generated ID
+        db.collection("Users")
+                .document(person.getUid())
+                .set(user)
+                .addOnSuccessListener(documentReference -> Log.d("TAG", "DocumentSnapshot added with ID: " + person.getUid()))
+                .addOnFailureListener(e -> Log.w("TAG", "Error adding document", e));
         Toast.makeText(Profile.this, "Data was successfully updated", Toast.LENGTH_SHORT).show();
         fetchDB();
     }
