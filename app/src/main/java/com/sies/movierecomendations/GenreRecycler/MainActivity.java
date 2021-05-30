@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.sies.movierecomendations.BuildConfig;
 import com.sies.movierecomendations.GenreApi.GenreList;
 import com.sies.movierecomendations.MovieDbAPI;
+import com.sies.movierecomendations.PopularMovies.PopularMovies;
 import com.sies.movierecomendations.Profile;
 import com.sies.movierecomendations.R;
 
@@ -50,6 +51,11 @@ public class MainActivity extends AppCompatActivity {
         }
 
         Button profile = findViewById(R.id.profile);
+        Button pop = findViewById(R.id.pop);
+
+        pop.setOnClickListener(v -> {
+            startActivity(new Intent(MainActivity.this, PopularMovies.class));
+        });
 
         movies = findViewById(R.id.movies);
         movies.setLayoutManager(new LinearLayoutManager(MainActivity.this));

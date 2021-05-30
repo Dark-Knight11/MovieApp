@@ -19,4 +19,5 @@ public interface MovieDbAPI {
     Call<GenreList> getGenre(
             @Query("api_key") String key
     );
+
 }

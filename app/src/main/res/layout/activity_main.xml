@@ -36,10 +36,22 @@
             android:id="@+id/profile"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
-            android:text="@string/profile"/>
+            android:layout_marginStart="70dp"
+            android:layout_marginTop="20dp"
+            android:text="@string/profile" />
+
+        <Button
+            android:id="@+id/pop"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_toEndOf="@id/profile"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="40dp"
+            android:text="POP"
+            tools:ignore="HardcodedText" />
+
 
     </RelativeLayout>
 
@@ -47,6 +59,7 @@
         android:id="@+id/movies"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:overScrollMode="never"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

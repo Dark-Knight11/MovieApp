@@ -19,6 +19,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MaterialComponents.NoActionBar"
         tools:ignore="AllowBackup">
+        <activity android:name=".PopularMovies.PopularMovies"></activity>
         <activity android:name=".SignIn">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -30,12 +31,11 @@
         <activity android:name=".ForgotPassword" />
         <activity android:name=".MoviesRecycler.Movies" />
         <activity android:name=".SignUp" />
-        <activity android:name=".FullScreenPFP"/>
+        <activity android:name=".FullScreenPFP" />
         <activity android:name=".GenreRecycler.MainActivity" />
         <activity
             android:name="com.canhub.cropper.CropImageActivity"
             android:theme="@style/Base.Theme.AppCompat" />
-
 
         <meta-data
             android:name="preloaded_fonts"

@@ -24,8 +24,8 @@ public class genreAdapter extends RecyclerView.Adapter<genreAdapter.ViewHolder> 
     @NonNull
     @Override
     public genreAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.activity_genre, parent, false);
         context = parent.getContext();
+        View view = LayoutInflater.from(context).inflate(R.layout.activity_genre, parent, false);
         return new ViewHolder(view);
     }
 
