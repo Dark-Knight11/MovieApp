@@ -1,7 +1,6 @@
 package com.sies.movierecomendations.PopularMovies;
 
 import android.os.Bundle;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -44,17 +43,9 @@ public class PopularMovies extends AppCompatActivity {
         header = findViewById(R.id.header);
         popMovies = findViewById(R.id.popMovies);
 
-        DisplayMetrics displayMetrics = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-        int width = displayMetrics.widthPixels;
-
-//        Toast.makeText(PopularMovies.this, Integer.toString(width), Toast.LENGTH_SHORT).show();
-        int spacing = 40; // 50px
-
         Glide.with(PopularMovies.this).load("https://image.tmdb.org/t/p/w500/srYya1ZlI97Au4jUYAktDe3avyA.jpg").into(header);
 
         popMovies.setLayoutManager(new GridLayoutManager(PopularMovies.this, 2));
-        popMovies.addItemDecoration(new GridItemDecoration(spacing));
         getApi(878);
 
     }
