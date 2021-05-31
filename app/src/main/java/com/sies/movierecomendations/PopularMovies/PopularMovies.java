@@ -43,18 +43,21 @@ public class PopularMovies extends AppCompatActivity {
         header = findViewById(R.id.header);
         popMovies = findViewById(R.id.popMovies);
 
-        Glide.with(PopularMovies.this).load("https://image.tmdb.org/t/p/w500/srYya1ZlI97Au4jUYAktDe3avyA.jpg").into(header);
+        Glide.with(PopularMovies.this).load("https://image.tmdb.org/t/p/original/srYya1ZlI97Au4jUYAktDe3avyA.jpg").into(header);
 
         popMovies.setLayoutManager(new GridLayoutManager(PopularMovies.this, 2));
-        getApi(878);
+        getApi();
 
     }
 
-    public void getApi(int genreID) {
-        movieDbAPI.getData(API_KEY, "popularity.desc", genreID).enqueue(new Callback<MoviesList>() {
+    public void getApi() {
+        movieDbAPI.getPopular(API_KEY).enqueue(new Callback<MoviesList>() {
             @Override
             public void onResponse(Call<MoviesList> call, Response<MoviesList> response) {
                 res = response.body();
+//                Log.i( "onResponse: ", String.valueOf(response.headers()));
+//                Log.i( "onResponse: ", String.valueOf(response.message()));
+//                Log.i( "onResponse: ", String.valueOf(response.raw()));
                 Toast.makeText(PopularMovies.this, "No of movies: " + Integer.toString(res.getResults().size()), Toast.LENGTH_SHORT).show();
                 popMovies.setAdapter(new PopularMoviesAdapter(res));
             }

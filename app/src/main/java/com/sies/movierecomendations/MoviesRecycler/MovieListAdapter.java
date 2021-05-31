@@ -65,7 +65,7 @@ public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.View
             if(fav%2==0) {
                 holder.star.setImageResource(R.drawable.ic_baseline_star_rate_24);
                 Map<String, Object> childUpdates = new HashMap<>();
-                childUpdates.put("id", res.getResults().get(position).getId());
+                childUpdates.put("id", res.getResults().get(position).getTitle());
                 mDatabase.child("Users").child(person.getUid()).child("favourites").updateChildren(childUpdates);
             }
             else holder.star.setImageResource(R.drawable.ic_baseline_star_outline_24);

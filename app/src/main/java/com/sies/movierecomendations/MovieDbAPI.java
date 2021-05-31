@@ -20,4 +20,9 @@ public interface MovieDbAPI {
             @Query("api_key") String key
     );
 
+    @GET("movie/popular")
+    Call<MoviesList> getPopular(
+            @Query("api_key") String key
+    );
+
 }

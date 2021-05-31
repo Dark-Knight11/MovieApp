@@ -19,7 +19,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MaterialComponents.NoActionBar"
         tools:ignore="AllowBackup">
-        <activity android:name=".PopularMovies.PopularMovies"></activity>
+        <activity android:name=".PopularMovies.MovieScreen"></activity>
+        <activity android:name=".PopularMovies.PopularMovies" />
         <activity android:name=".SignIn">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
