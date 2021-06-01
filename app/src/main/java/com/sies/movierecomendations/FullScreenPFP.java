@@ -21,6 +21,10 @@ public class FullScreenPFP extends AppCompatActivity {
         setContentView(R.layout.activity_full_screen_pfp);
         ImageView full = findViewById(R.id.imageView);
 
+//        Bundle bundle = getIntent().getExtras();
+//        int image = bundle.getInt("image");
+//        full.setImageResource(image);
+
         ContextWrapper cw = new ContextWrapper(getApplicationContext());
         File directory = cw.getDir("CineMania", Context.MODE_PRIVATE);
         File filepath  = directory.getAbsoluteFile();
