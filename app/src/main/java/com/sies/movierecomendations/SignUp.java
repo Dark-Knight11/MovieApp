@@ -38,6 +38,7 @@ public class SignUp extends AppCompatActivity {
 
     private Handler mHandler = new Handler();
 
+    // requiremnets for local storage
     SharedPreferences sharedPreferences;
     SharedPreferences.Editor editor;
 
@@ -119,6 +120,8 @@ public class SignUp extends AppCompatActivity {
             Sign_Up();
         });
     }
+
+    // starts user registration process
     private void Sign_Up() {
         mAuth.createUserWithEmailAndPassword(emailId, pass)
                 .addOnCompleteListener(this, task -> {
@@ -139,6 +142,7 @@ public class SignUp extends AppCompatActivity {
                 });
     }
 
+    // function for sending verification mail
     private void sendEmail() {
         Objects.requireNonNull(mAuth.getCurrentUser()).sendEmailVerification().addOnCompleteListener(task1 -> {
             if(task1.isSuccessful()) {
@@ -173,7 +177,7 @@ public class SignUp extends AppCompatActivity {
 }
 
 
-    // function for uploading data on Realtime DB
+// function for uploading data on Realtime DB
 /*    User user = new User(emailId, Name);
     FirebaseDatabase.getInstance().getReference("Users")
             .child(Objects.requireNonNull(mAuth.getCurrentUser()).getUid())
