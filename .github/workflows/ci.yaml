@@ -23,7 +23,9 @@ jobs:
       - name: Decode API KEY
         env:
           API_KEY: ${{secrets.API_KEY}}
+          FIREBASE_KEY: ${{secrets.FIREBASE_KEY}}
         run: |
+          echo $FIREBASE_KEY > app/google-services.json
           echo $API_KEY > gradle.properties
           echo "org.gradle.jvmargs=-Xmx2048m -Dfile.encoding=UTF-8" >> gradle.properties
           echo "android.useAndroidX=true" >> gradle.properties
