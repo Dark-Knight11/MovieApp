@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.sies.movierecomendations.BuildConfig;
-import com.sies.movierecomendations.MovieDbAPI;
+import com.sies.movierecomendations.MoviesApi.MovieDbAPI;
 import com.sies.movierecomendations.MoviesApi.MoviesList;
 import com.sies.movierecomendations.R;
 
