@@ -51,8 +51,8 @@ jobs:
 
       # Autobuild attempts to build any compiled languages  (C/C++, C#, or Java).
       # If this step fails, then you should remove it and run the build manually (see below)
-      - name: Autobuild
-        uses: github/codeql-action/autobuild@v1
+#      - name: Autobuild
+#        uses: github/codeql-action/autobuild@v1
 
       # ℹ️ Command-line programs to run using the OS shell.
       # 📚 https://git.io/JvXDl
@@ -61,9 +61,20 @@ jobs:
       #    and modify them (or add more) to build your code if your project
       #    uses a compiled language
 
-      #- run: |
-      #   make bootstrap
-      #   make release
+      - name: Decode API KEY
+          env:
+            API_KEY: ${{secrets.API_KEY}}
+            FIREBASE_KEY: ${{secrets.FIREBASE_KEY}}
+          run: |
+            echo $FIREBASE_KEY > app/google-services.json
+            echo $API_KEY > gradle.properties
+            echo "org.gradle.jvmargs=-Xmx2048m -Dfile.encoding=UTF-8" >> gradle.properties
+            echo "android.useAndroidX=true" >> gradle.properties
+            echo "android.enableJetifier=true" >> gradle.properties
+
+      - run: |
+         make bootstrap
+         make release
 
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v1
