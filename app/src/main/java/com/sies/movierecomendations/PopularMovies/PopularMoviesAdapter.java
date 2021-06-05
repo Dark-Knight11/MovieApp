@@ -53,9 +53,9 @@ public class PopularMoviesAdapter extends RecyclerView.Adapter<PopularMoviesAdap
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        private ImageView poster;
-        private TextView movieName;
-        private ConstraintLayout card;
+        private final ImageView poster;
+        private final TextView movieName;
+        private final ConstraintLayout card;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 

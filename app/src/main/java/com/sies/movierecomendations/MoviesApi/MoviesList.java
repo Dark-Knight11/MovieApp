@@ -4,7 +4,7 @@ import java.util.List;
 
 public class MoviesList {
     int page;
-    private List<Results> results;
+    private final List<Results> results;
 
     public int getPage() {
         return page;

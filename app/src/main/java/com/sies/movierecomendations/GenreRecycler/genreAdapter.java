@@ -34,6 +34,19 @@ public class genreAdapter extends RecyclerView.Adapter<genreAdapter.ViewHolder> 
         holder.genre.setText(res.getGenres().get(position).getName());
 
         holder.genre.setOnClickListener(v -> {
+
+            // Passing data to fragment
+//            AppCompatActivity activity = (AppCompatActivity) v.getContext();
+//            MoviesCardFragment moviesCardFragment = new MoviesCardFragment();
+//
+//            FragmentManager at = activity.getSupportFragmentManager();
+//            Bundle result = new Bundle();
+//            result.putInt("genreId", res.getGenres().get(position).getId());
+//
+//            at.setFragmentResult("requestKey", result);
+//            at.beginTransaction().replace(R.id.genre, moviesCardFragment).addToBackStack(null).commit();
+
+
             Intent intent = new Intent(context, Movies.class);
             intent.putExtra("genreId", res.getGenres().get(position).getId());
             context.startActivity(intent);
@@ -45,8 +58,7 @@ public class genreAdapter extends RecyclerView.Adapter<genreAdapter.ViewHolder> 
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView genre;
-
+        private final TextView genre;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             genre = itemView.findViewById(R.id.genre);

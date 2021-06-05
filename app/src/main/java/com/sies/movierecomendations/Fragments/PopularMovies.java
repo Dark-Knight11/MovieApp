@@ -8,13 +8,14 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.sies.movierecomendations.BuildConfig;
-import com.sies.movierecomendations.MoviesApi.MovieDbAPI;
+import com.sies.movierecomendations.MovieDbAPI;
 import com.sies.movierecomendations.MoviesApi.MoviesList;
 import com.sies.movierecomendations.PopularMovies.PopularMoviesAdapter;
 import com.sies.movierecomendations.R;
@@ -94,9 +95,9 @@ public class PopularMovies extends Fragment {
         popMovies = view.findViewById(R.id.popMovies);
 
         Glide
-                .with(PopularMovies.this)
-                .load("https://image.tmdb.org/t/p/original/srYya1ZlI97Au4jUYAktDe3avyA.jpg")
-                .into(header);
+            .with(PopularMovies.this)
+            .load("https://image.tmdb.org/t/p/original/srYya1ZlI97Au4jUYAktDe3avyA.jpg")
+            .into(header);
 
         popMovies.setLayoutManager(new GridLayoutManager(getContext(), 2));
         getApi();
@@ -106,17 +107,17 @@ public class PopularMovies extends Fragment {
     public void getApi() {
         movieDbAPI.getPopular(API_KEY).enqueue(new Callback<MoviesList>() {
             @Override
-            public void onResponse(Call<MoviesList> call, Response<MoviesList> response) {
+            public void onResponse(@NonNull Call<MoviesList> call, @NonNull Response<MoviesList> response) {
                 res = response.body();
 //                Log.i( "onResponse: ", String.valueOf(response.headers()));
 //                Log.i( "onResponse: ", String.valueOf(response.message()));
 //                Log.i( "onResponse: ", String.valueOf(response.raw()));
-                Toast.makeText(getActivity().getApplicationContext(), "No of movies: " + Integer.toString(res.getResults().size()), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity().getApplicationContext(), "No of movies: " + res.getResults().size(), Toast.LENGTH_SHORT).show();
                 popMovies.setAdapter(new PopularMoviesAdapter(res));
             }
 
             @Override
-            public void onFailure(Call<MoviesList> call, Throwable t) {
+            public void onFailure(@NonNull Call<MoviesList> call, @NonNull Throwable t) {
                 Log.i("onFailure: ", t.getMessage());
             }
         });

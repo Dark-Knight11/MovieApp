@@ -1,20 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
 
     <item
         android:id="@+id/genre"
         android:icon="@drawable/ic_baseline_star_rate_24"
-        android:title="genre"/>
+        android:title="genre"
+        tools:ignore="HardcodedText" />
 
     <item
         android:id="@+id/popular"
         android:icon="@drawable/ic_baseline_home_24"
-        android:title="pop"/>
+        android:title="Home"
+        tools:ignore="HardcodedText" />
 
     <item
         android:id="@+id/profile"
         android:icon="@drawable/ic_baseline_person_24"
-        android:title="Profile"/>
-
+        android:title="Profile"
+        tools:ignore="HardcodedText" />
 
 </menu>

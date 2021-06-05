@@ -1,6 +1,7 @@
-package com.sies.movierecomendations.MoviesApi;
+package com.sies.movierecomendations;
 
 import com.sies.movierecomendations.GenreApi.GenreList;
+import com.sies.movierecomendations.MoviesApi.MoviesList;
 
 import retrofit2.Call;
 import retrofit2.http.GET;

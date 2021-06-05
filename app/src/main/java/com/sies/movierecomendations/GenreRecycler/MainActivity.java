@@ -2,9 +2,9 @@ package com.sies.movierecomendations.GenreRecycler;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
-import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -32,36 +32,47 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        View pop = findViewById(R.id.popular);
-        View genre = findViewById(R.id.genre);
-        View profile = findViewById(R.id.profile);
+//        View pop = findViewById(R.id.popular);
+//        View genre = findViewById(R.id.genre);
+//        View profile = findViewById(R.id.profile);
+
+        FragmentManager ft = getSupportFragmentManager();
+//        ft.beginTransaction().add(R.id.fl_wrapper, new PopularMovies(), "Home").commit();
+
+        final androidx.fragment.app.Fragment genre = new GenreFragment();
+        final androidx.fragment.app.Fragment popularMovies = new PopularMovies();
+        final androidx.fragment.app.Fragment profile = new ProfileFragment();
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
 //        bottomNavigationView.setItemIconTintList(null);
 //        bottomNavigationView.setItemTextColor(null);
 
-//        bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
-//            switch (item.getItemId()) {
-//                case R.id.genre:
-//                    bottomNavigationView.setItemTextColor(ColorStateList.valueOf(R.color.teal_200));
-//                    bottomNavigationView.setItemIconTintList(ColorStateList.valueOf(R.color.teal_200));
-//                case R.id.popular:
-//                    bottomNavigationView.setItemTextColor(ColorStateList.valueOf(R.color.teal_200));
-//                    bottomNavigationView.setItemIconTintList(ColorStateList.valueOf(R.color.teal_200));
-//                case R.id.profile:
-//                    bottomNavigationView.setItemTextColor(ColorStateList.valueOf(R.color.teal_200));
-//                    bottomNavigationView.setItemIconTintList(ColorStateList.valueOf(R.color.teal_200));
-//            }
-//            return true;
-//        });
+        bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
+            Fragment fragment;
+            switch (item.getItemId()) {
+                case R.id.genre:
+                    fragment = genre;
+                    break;
+                case R.id.popular:
+                    fragment = popularMovies;
+                    break;
+                case R.id.profile:
+                    fragment = profile;
+                    break;
+                default:
+                    fragment = popularMovies;
+                    break;
+            }
+            ft.beginTransaction().replace(R.id.fl_wrapper, fragment).commit();
+            return true;
+        });
+        bottomNavigationView.setSelectedItemId(R.id.popular);
 
 
-        FragmentManager ft = getSupportFragmentManager();
-        ft.beginTransaction().add(R.id.fl_wrapper, new PopularMovies(), "Home").commit();
 
-        pop.setOnClickListener(v -> ft.beginTransaction().replace(R.id.fl_wrapper, new PopularMovies(), "Home").commit());
-        genre.setOnClickListener(v -> ft.beginTransaction().replace(R.id.fl_wrapper, new GenreFragment(), "Genre").commit());
-        profile.setOnClickListener(v -> ft.beginTransaction().replace(R.id.fl_wrapper, new ProfileFragment(), "Profile").commit());
+//        pop.setOnClickListener(v -> ft.beginTransaction().replace(R.id.fl_wrapper, new PopularMovies(), "Home").commit());
+//        genre.setOnClickListener(v -> ft.beginTransaction().replace(R.id.fl_wrapper, new GenreFragment(), "Genre").commit());
+//        profile.setOnClickListener(v -> ft.beginTransaction().replace(R.id.fl_wrapper, new ProfileFragment(), "Profile").commit());
 
     }
 }

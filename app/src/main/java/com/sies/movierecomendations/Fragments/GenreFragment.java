@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -17,7 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.sies.movierecomendations.BuildConfig;
 import com.sies.movierecomendations.GenreApi.GenreList;
 import com.sies.movierecomendations.GenreRecycler.genreAdapter;
-import com.sies.movierecomendations.MoviesApi.MovieDbAPI;
+import com.sies.movierecomendations.MovieDbAPI;
 import com.sies.movierecomendations.R;
 
 import retrofit2.Call;
@@ -102,14 +103,14 @@ public class GenreFragment extends Fragment {
 
         movieDbAPI.getGenre(API_KEY).enqueue(new Callback<GenreList>() {
             @Override
-            public void onResponse(Call<GenreList> call, Response<GenreList> response) {
+            public void onResponse(@NonNull Call<GenreList> call, @NonNull Response<GenreList> response) {
                 res = response.body();
                 Log.i("onResponse: ", String.valueOf(response.code()));
                 movies.setAdapter(new genreAdapter(res));
             }
 
             @Override
-            public void onFailure(Call<GenreList> call, Throwable t) {
+            public void onFailure(@NonNull Call<GenreList> call, @NonNull Throwable t) {
                 Log.i("onFailure: ", t.getMessage());
             }
         });

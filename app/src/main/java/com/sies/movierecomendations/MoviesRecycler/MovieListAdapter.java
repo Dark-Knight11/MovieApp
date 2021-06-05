@@ -81,12 +81,12 @@ public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.View
     }
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        private ImageView poster;
-        private TextView title;
-        private TextView desc;
-        private TextView date;
-        private ConstraintLayout frame;
-        private ImageView star;
+        private final ImageView poster;
+        private final TextView title;
+        private final TextView desc;
+        private final TextView date;
+        private final ConstraintLayout frame;
+        private final ImageView star;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             poster = itemView.findViewById(R.id.image);
