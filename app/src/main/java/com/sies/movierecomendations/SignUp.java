@@ -36,7 +36,7 @@ public class SignUp extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
 
-    private Handler mHandler = new Handler();
+    private final Handler mHandler = new Handler();
 
     // requiremnets for local storage
     SharedPreferences sharedPreferences;
@@ -178,21 +178,23 @@ public class SignUp extends AppCompatActivity {
 
 
 // function for uploading data on Realtime DB
-/*    User user = new User(emailId, Name);
+/*private uploadRTDB() {
+    User user = new User(emailId, Name);
     FirebaseDatabase.getInstance().getReference("Users")
-            .child(Objects.requireNonNull(mAuth.getCurrentUser()).getUid())
-            .setValue(user)
-            .addOnCompleteListener(task2 -> {
-        if(task2.isSuccessful()) {
-            Log.i("TAG", "onComplete: congo");
-            editor.putString("name", Name);
-            editor.putString("email", emailId);
-            editor.commit();
-            startActivity(new Intent(SignUp.this, SignIn.class));
-            finish();
-        } else {
-            Log.w("TAG", "saveUserDetails:failure", task2.getException());
-            pgbar.setVisibility(View.GONE);
-        }
+        .child(Objects.requireNonNull(mAuth.getCurrentUser()).getUid())
+        .setValue(user)
+        .addOnCompleteListener(task2 -> {
+            if(task2.isSuccessful()) {
+                Log.i("TAG", "onComplete: congo");
+                editor.putString("name", Name);
+                editor.putString("email", emailId);
+                editor.commit();
+                startActivity(new Intent(SignUp.this, SignIn.class));
+                finish();
+            } else {
+                Log.w("TAG", "saveUserDetails:failure", task2.getException());
+                pgbar.setVisibility(View.GONE);
+            }
     });
+}
 */

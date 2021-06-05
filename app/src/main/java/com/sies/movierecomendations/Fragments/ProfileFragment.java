@@ -1,4 +1,4 @@
-package com.sies.movierecomendations;
+package com.sies.movierecomendations.Fragments;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -14,15 +14,18 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
 
 import com.canhub.cropper.CropImage;
 import com.canhub.cropper.CropImageView;
@@ -31,6 +34,9 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.sies.movierecomendations.FullScreenPFP;
+import com.sies.movierecomendations.R;
+import com.sies.movierecomendations.SignIn;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -39,8 +45,26 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-public class Profile extends AppCompatActivity {
+import static android.app.Activity.RESULT_OK;
+
+/**
+ * A simple {@link Fragment} subclass.
+ * Use the {@link ProfileFragment#newInstance} factory method to
+ * create an instance of this fragment.
+ */
+public class ProfileFragment extends Fragment {
+
+    // TODO: Rename parameter arguments, choose names that match
+    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+    private static final String ARG_PARAM1 = "param1";
+    private static final String ARG_PARAM2 = "param2";
+
+    // TODO: Rename and change types of parameters
+    private String mParam1;
+    private String mParam2;
 
     // Variables
     private static final int PICK_IMAGE_REQUEST = 43;
@@ -67,37 +91,72 @@ public class Profile extends AppCompatActivity {
     FirebaseStorage storage = FirebaseStorage.getInstance();
     StorageReference pathReference = storage.getReference().child("images/" + person.getUid());
 
+    // Email validation regex pattern
+    private final String regex = "^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$";
+    private final Pattern pattern = Pattern.compile(regex);
+
+    public ProfileFragment() {
+        // Required empty public constructor
+    }
+
+    /**
+     * Use this factory method to create a new instance of
+     * this fragment using the provided parameters.
+     *
+     * @param param1 Parameter 1.
+     * @param param2 Parameter 2.
+     * @return A new instance of fragment ProfileFragment.
+     */
+    // TODO: Rename and change types and number of parameters
+    public static ProfileFragment newInstance(String param1, String param2) {
+        ProfileFragment fragment = new ProfileFragment();
+        Bundle args = new Bundle();
+        args.putString(ARG_PARAM1, param1);
+        args.putString(ARG_PARAM2, param2);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            mParam1 = getArguments().getString(ARG_PARAM1);
+            mParam2 = getArguments().getString(ARG_PARAM2);
+        }
+    }
+
     @SuppressLint("CommitPrefEdits")
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_profile);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        View view = inflater.inflate(R.layout.fragment_profile, container, false);
 
-        sharedPreferences = getSharedPreferences("com.sies.cinemania.PREFERENCE_FILE_KEY", Context.MODE_PRIVATE);
+        sharedPreferences = getActivity().getSharedPreferences("com.sies.cinemania.PREFERENCE_FILE_KEY", Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
-        cw = new ContextWrapper(getApplicationContext());
+        cw = new ContextWrapper(getActivity());
 
         // assign views to variables
-        nameF = findViewById(R.id.name);
-        emailF = findViewById(R.id.email);
-        phoneF = findViewById(R.id.phone);
-        logout = findViewById(R.id.logout);
-        update = findViewById(R.id.update);
-        select = findViewById(R.id.select);
-        upload = findViewById(R.id.upload);
-        pfp = findViewById(R.id.pfp);
+        nameF = view.findViewById(R.id.name);
+        emailF = view.findViewById(R.id.email);
+        phoneF = view.findViewById(R.id.phone);
+        logout = view.findViewById(R.id.logout);
+        update = view.findViewById(R.id.update);
+        select = view.findViewById(R.id.select);
+        upload = view.findViewById(R.id.upload);
+        pfp = view.findViewById(R.id.pfp);
 
-        // fetch User data
         fetchDB();
 
         // fullscreen image
-        pfp.setOnClickListener(v -> startActivity(new Intent(Profile.this, FullScreenPFP.class)));
+        pfp.setOnClickListener(v -> startActivity(new Intent(getContext(), FullScreenPFP.class)));
 
         // logs out the current user
         logout.setOnClickListener(v -> {
             FirebaseAuth.getInstance().signOut();
-            startActivity(new Intent(Profile.this, SignIn.class));
-            finish();
+            startActivity(new Intent(getContext(), SignIn.class));
+            getActivity().finish();
         });
 
         if(networkWhere()) {
@@ -106,14 +165,15 @@ public class Profile extends AppCompatActivity {
                 phone = phoneF.getText().toString().trim();
                 name = nameF.getText().toString().trim();
                 email = emailF.getText().toString().trim();
+                if(!fieldsValidation()) return;
                 updateDB();
             });
         }
 
         // select image for pfp
         select.setOnClickListener(v -> {
-            if(ContextCompat.checkSelfPermission(Profile.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)!= PackageManager.PERMISSION_GRANTED)
-                ActivityCompat.requestPermissions(Profile.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, PERMISSION_FILE);
+            if(ContextCompat.checkSelfPermission(getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE)!= PackageManager.PERMISSION_GRANTED)
+                requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, PERMISSION_FILE);
             else
                 SelectImage();
         });
@@ -121,8 +181,8 @@ public class Profile extends AppCompatActivity {
         // upload image on firebase
         if(networkWhere()) upload.setOnClickListener(v -> upload());
 
+        return view;
     }
-
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*---------------------------------------------------------------FUNCTIONS------------------------------------------------------------*/
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -184,7 +244,7 @@ public class Profile extends AppCompatActivity {
                 .set(user)
                 .addOnSuccessListener(documentReference -> Log.d("TAG", "DocumentSnapshot added with ID: " + person.getUid()))
                 .addOnFailureListener(e -> Log.w("TAG", "Error adding document", e));
-        Toast.makeText(Profile.this, "Data was successfully updated", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getContext(), "Data was successfully updated", Toast.LENGTH_SHORT).show();
         fetchDB();
     }
 
@@ -199,7 +259,7 @@ public class Profile extends AppCompatActivity {
 
     // reads the image selected by user
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
         // checking request code and result code
@@ -211,7 +271,7 @@ public class Profile extends AppCompatActivity {
                     .setGuidelines(CropImageView.Guidelines.ON)
                     .setCropShape(CropImageView.CropShape.OVAL)
                     .setFixAspectRatio(true)
-                    .start(this);
+                    .start(getContext(), this);
 
         } else if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
             CropImage.ActivityResult result = CropImage.getActivityResult(data);
@@ -221,9 +281,19 @@ public class Profile extends AppCompatActivity {
 
             } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
                 Exception error = result.getError();
-                Toast.makeText(Profile.this, error.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
             }
         }
+    }
+
+    @SuppressLint("MissingSuperCall")
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == PERMISSION_FILE)
+            // If request is cancelled, the result arrays are empty.
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
+                SelectImage();
     }
 
     // function for uploading image in firebase
@@ -232,22 +302,22 @@ public class Profile extends AppCompatActivity {
             pathReference.putFile(resultUri)
                     .addOnSuccessListener(taskSnapshot -> {
                         StoreImage();
-                        Toast.makeText(Profile.this, "Image was uploaded", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), "Image was uploaded", Toast.LENGTH_SHORT).show();
                     })
                     .addOnFailureListener(e ->
-                        Toast.makeText(Profile.this, e.getMessage(), Toast.LENGTH_SHORT).show());
+                            Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show());
         } else
-            Toast.makeText(Profile.this, "Please Select an Image", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "Please Select an Image", Toast.LENGTH_SHORT).show();
         resultUri = null;
     }
-
     // checks for Internet Connectivity
+
     private boolean networkWhere() {
 
         boolean have_WIFI = false;
         boolean have_MobileData = false;
 
-        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
+        ConnectivityManager connectivityManager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo[] networkInfos = connectivityManager.getAllNetworkInfo();
 
         for(NetworkInfo info: networkInfos) {
@@ -262,48 +332,39 @@ public class Profile extends AppCompatActivity {
         return have_MobileData || have_WIFI;
     }
 
+    // function for validating all input fields
+    private boolean fieldsValidation() {
+        Matcher matcher = pattern.matcher(email);
 
-    @SuppressLint("MissingSuperCall")
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if (requestCode == PERMISSION_FILE)
-            // If request is cancelled, the result arrays are empty.
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
-                SelectImage();
+        // checks if email field is empty
+        if (TextUtils.isEmpty(email)) {
+            emailF.setError("Email Required");
+            emailF.requestFocus();
+            return false;
+        }
+
+        // checks if valid email is entered
+        if (!matcher.matches()) {
+            emailF.setError("Please enter valid email");
+            emailF.requestFocus();
+            return false;
+        }
+
+        // checks if name field is empty
+        if (TextUtils.isEmpty(name)) {
+            nameF.setError("Please Enter your Username");
+            nameF.requestFocus();
+            return false;
+        }
+
+        // checks if phone field is empty
+        if (TextUtils.isEmpty(phone)) {
+            phoneF.setError("Phone Number Required");
+            phoneF.requestFocus();
+            return false;
+        }
+
+        return true;
     }
 
-
-    // function for downloading image from firebase and setting it as pfp
-    /*public void download() {
-        long MAXBYTES = 4096*4096;
-        pathReference.getBytes(MAXBYTES).addOnSuccessListener(bytes -> {
-            Log.i("TAG", "firebaseImageDwl: ");
-            Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-            pfp.setImageBitmap(bitmap);
-        }).addOnFailureListener(Throwable::printStackTrace);
-    }*/
-
-    // fetching realtime database
-    /* public void fbData() {
-        ValueEventListener postListener = new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if(dataSnapshot.exists()) {
-                    // Get Post object and use the values to update the UI
-                    User user = dataSnapshot.getValue(User.class);
-                    assert user != null;
-                    nameF.setText(user.Name);
-                    phoneF.setText(user.phone);
-                    emailF.setText(person.getEmail());
-                } else
-                    Toast.makeText(Profile.this, "Data not present", Toast.LENGTH_SHORT).show();
-            }
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                // Getting Post failed, log a message
-                Log.w("TAG", "loadPost:onCancelled", databaseError.toException());
-            }
-        };
-        mDatabase.child("Users").child(person.getUid()).addValueEventListener(postListener);
-    } */
 }

@@ -5,13 +5,12 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -82,12 +81,12 @@ public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.View
     }
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        private ImageView poster;
-        private TextView title;
-        private TextView desc;
-        private TextView date;
-        private RelativeLayout frame;
-        private ImageButton star;
+        private final ImageView poster;
+        private final TextView title;
+        private final TextView desc;
+        private final TextView date;
+        private final ConstraintLayout frame;
+        private final ImageView star;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             poster = itemView.findViewById(R.id.image);

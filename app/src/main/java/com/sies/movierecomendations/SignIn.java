@@ -13,14 +13,14 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -38,11 +38,10 @@ import java.util.regex.Pattern;
 
 public class SignIn extends AppCompatActivity {
 
-    EditText email, pass;
-    TextView signup, forgot, resend;
-    Button login;
+    TextInputEditText email, pass;
+    TextView forgot, resend;
+    ImageView login, signup;
     ProgressBar pgbar;
-    private FirebaseAuth mAuth;
     private String emailId, password;
 
     // local storage requirements
@@ -50,6 +49,7 @@ public class SignIn extends AppCompatActivity {
     SharedPreferences.Editor editor;
     ContextWrapper cw;
 
+    FirebaseAuth mAuth;
     FirebaseUser person;
 
     // get Firestore Instance
@@ -83,8 +83,8 @@ public class SignIn extends AppCompatActivity {
         } else {
             sharedPreferences = getSharedPreferences("com.sies.cinemania.PREFERENCE_FILE_KEY", Context.MODE_PRIVATE);
             editor = sharedPreferences.edit();
-            email = findViewById(R.id.email);
-            pass = findViewById(R.id.password);
+            email = (TextInputEditText) findViewById(R.id.email);
+            pass = (TextInputEditText) findViewById(R.id.password);
             signup = findViewById(R.id.signup);
             forgot = findViewById(R.id.forgotPassword);
             resend = findViewById(R.id.resend);
@@ -174,9 +174,8 @@ public class SignIn extends AppCompatActivity {
                 Log.w("TAG", "signInUserWithEmail:failure", task.getException());
                 if (Objects.requireNonNull(task.getException()).toString().contains("The password is invalid"))
                     Toast.makeText(SignIn.this, "Wrong Password", Toast.LENGTH_SHORT).show();
-                else if (Objects.requireNonNull(task.getException()).toString().contains("There is no user record corresponding to this identifier")) {
+                else if (Objects.requireNonNull(task.getException()).toString().contains("There is no user record corresponding to this identifier"))
                     Toast.makeText(SignIn.this, "User does not exist. Please create new account", Toast.LENGTH_SHORT).show();
-                }
             }
             pgbar.setVisibility(View.GONE);
         });

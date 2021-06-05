@@ -19,8 +19,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MaterialComponents.NoActionBar"
         tools:ignore="AllowBackup">
-        <activity android:name=".PopularMovies.MovieScreen"></activity>
-        <activity android:name=".PopularMovies.PopularMovies" />
         <activity android:name=".SignIn">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -28,7 +26,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Profile" />
+
+        <activity android:name=".PopularMovies.MovieScreen"/>
+<!--        <activity android:name=".PopularMovies.PopularMovies" />-->
+<!--        <activity android:name=".Profile" />-->
         <activity android:name=".ForgotPassword" />
         <activity android:name=".MoviesRecycler.Movies" />
         <activity android:name=".SignUp" />

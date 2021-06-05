@@ -4,11 +4,11 @@ import android.widget.RelativeLayout;
 
 public class MovieModelClass {
 
-    private int image;
-    private String title;
-    private String description;
-    private String releaseDate;
-    private RelativeLayout frame;
+    private final int image;
+    private final String title;
+    private final String description;
+    private final String releaseDate;
+    private final RelativeLayout frame;
 
     MovieModelClass(int image, String title,String description, String releaseDate, RelativeLayout frame) {
         this.image=image;

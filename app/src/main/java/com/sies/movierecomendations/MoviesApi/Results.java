@@ -1,13 +1,13 @@
 package com.sies.movierecomendations.MoviesApi;
 
 public class Results {
-    private String title;
-    private String overview;
-    private String release_date;
-    private String poster_path;
-    private String backdrop_path;
-    private int id;
-    private float vote_average;
+    private final String title;
+    private final String overview;
+    private final String release_date;
+    private final String poster_path;
+    private final String backdrop_path;
+    private final int id;
+    private final float vote_average;
 
 
     public Results(String title, String overview, String release_date, String poster_path, String backdrop_path, int id, float vote_average) {
