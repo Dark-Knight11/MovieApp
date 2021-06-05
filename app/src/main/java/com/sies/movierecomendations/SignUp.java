@@ -178,7 +178,8 @@ public class SignUp extends AppCompatActivity {
 
 
 // function for uploading data on Realtime DB
-/*    User user = new User(emailId, Name);
+/*private uploadRTDB() {
+    User user = new User(emailId, Name);
     FirebaseDatabase.getInstance().getReference("Users")
         .child(Objects.requireNonNull(mAuth.getCurrentUser()).getUid())
         .setValue(user)
@@ -195,4 +196,5 @@ public class SignUp extends AppCompatActivity {
                 pgbar.setVisibility(View.GONE);
             }
     });
+}
 */
