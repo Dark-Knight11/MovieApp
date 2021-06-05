@@ -21,6 +21,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -45,8 +46,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -70,7 +69,8 @@ public class ProfileFragment extends Fragment {
     private static final int PICK_IMAGE_REQUEST = 43;
     private static final int PERMISSION_FILE = 23;
     private Uri resultUri;
-    private EditText nameF, phoneF, emailF;
+    private EditText nameF, phoneF;
+    private TextView emailF;
     private String name, phone, email;
     private de.hdodenhof.circleimageview.CircleImageView pfp;
     private Button logout, update, select, upload;
@@ -90,10 +90,6 @@ public class ProfileFragment extends Fragment {
     // get image from storage
     FirebaseStorage storage = FirebaseStorage.getInstance();
     StorageReference pathReference = storage.getReference().child("images/" + person.getUid());
-
-    // Email validation regex pattern
-    private final String regex = "^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$";
-    private final Pattern pattern = Pattern.compile(regex);
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -164,7 +160,6 @@ public class ProfileFragment extends Fragment {
             update.setOnClickListener(v -> {
                 phone = phoneF.getText().toString().trim();
                 name = nameF.getText().toString().trim();
-                email = emailF.getText().toString().trim();
                 if(!fieldsValidation()) return;
                 updateDB();
             });
@@ -230,13 +225,11 @@ public class ProfileFragment extends Fragment {
     private void updateDB() {
         editor.putString("name", name);
         editor.putString("phone", phone);
-        editor.putString("email", email);
         editor.commit();
 
         Map<String, Object> user = new HashMap<>();
         user.put("Name", name);
         user.put("phone", phone);
-        user.put("Email", email);
 
         // Add a new document with a generated ID
         db.collection("Users")
@@ -334,21 +327,6 @@ public class ProfileFragment extends Fragment {
 
     // function for validating all input fields
     private boolean fieldsValidation() {
-        Matcher matcher = pattern.matcher(email);
-
-        // checks if email field is empty
-        if (TextUtils.isEmpty(email)) {
-            emailF.setError("Email Required");
-            emailF.requestFocus();
-            return false;
-        }
-
-        // checks if valid email is entered
-        if (!matcher.matches()) {
-            emailF.setError("Please enter valid email");
-            emailF.requestFocus();
-            return false;
-        }
 
         // checks if name field is empty
         if (TextUtils.isEmpty(name)) {
