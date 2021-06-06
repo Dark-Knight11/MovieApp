@@ -269,11 +269,14 @@ public class ProfileFragment extends Fragment {
         } else if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
             CropImage.ActivityResult result = CropImage.getActivityResult(data);
             if (resultCode == RESULT_OK) {
+                assert result != null;
                 resultUri = result.getUriContent();
                 pfp.setImageURI(resultUri);
 
             } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+                assert result != null;
                 Exception error = result.getError();
+                assert error != null;
                 Toast.makeText(getContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
             }
         }
@@ -293,12 +296,12 @@ public class ProfileFragment extends Fragment {
     private void upload() {
         if(resultUri!=null) {
             pathReference.putFile(resultUri)
-                    .addOnSuccessListener(taskSnapshot -> {
-                        StoreImage();
-                        Toast.makeText(getContext(), "Image was uploaded", Toast.LENGTH_SHORT).show();
-                    })
-                    .addOnFailureListener(e ->
-                            Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show());
+                .addOnSuccessListener(taskSnapshot -> {
+                    StoreImage();
+                    Toast.makeText(getContext(), "Image was uploaded", Toast.LENGTH_SHORT).show();
+                })
+                .addOnFailureListener(e ->
+                        Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show());
         } else
             Toast.makeText(getContext(), "Please Select an Image", Toast.LENGTH_SHORT).show();
         resultUri = null;
