@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -20,7 +21,6 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -38,7 +38,7 @@ import java.util.regex.Pattern;
 
 public class SignIn extends AppCompatActivity {
 
-    TextInputEditText email, pass;
+    EditText email, pass;
     TextView forgot, resend;
     ImageView login, signup;
     ProgressBar pgbar;
@@ -56,7 +56,8 @@ public class SignIn extends AppCompatActivity {
     FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     // get image from storage
-    FirebaseStorage storage;
+    FirebaseStorage storage = FirebaseStorage.getInstance();
+    StorageReference storageRef = storage.getReference();
 
     // Email validation regex pattern
     private final String regex = "^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$";
@@ -83,8 +84,8 @@ public class SignIn extends AppCompatActivity {
         } else {
             sharedPreferences = getSharedPreferences("com.sies.cinemania.PREFERENCE_FILE_KEY", Context.MODE_PRIVATE);
             editor = sharedPreferences.edit();
-            email = (TextInputEditText) findViewById(R.id.email);
-            pass = (TextInputEditText) findViewById(R.id.password);
+            email = findViewById(R.id.email);
+            pass = findViewById(R.id.password);
             signup = findViewById(R.id.signup);
             forgot = findViewById(R.id.forgotPassword);
             resend = findViewById(R.id.resend);
@@ -105,8 +106,8 @@ public class SignIn extends AppCompatActivity {
 
             // resends verification email
             resend.setOnClickListener(v -> {
-                emailId = email.getText().toString().trim();
-                password = pass.getText().toString().trim();
+                emailId = Objects.requireNonNull(email.getText()).toString().trim();
+                password = Objects.requireNonNull(pass.getText()).toString().trim();
 
                 if (!fieldsValidation()) return;
 
@@ -188,57 +189,56 @@ public class SignIn extends AppCompatActivity {
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
-                        Map<String, Object> document = task.getResult().getData();
-                        Log.d("TAG", task.getResult().getId()+ " => " + document);
-                        editor.putString("name", document.get("Name").toString());
-                        editor.putString("phone", document.get("phone").toString());
-                        editor.putString("email", document.get("Email").toString());
+                        Map<String, Object> document = Objects.requireNonNull(task.getResult()).getData();
+                        Log.d("fbData", task.getResult().getId()+ " => " + document);
+                        editor.putString("name", Objects.requireNonNull(Objects.requireNonNull(document).get("Name")).toString());
+                        editor.putString("phone", Objects.requireNonNull(document.get("phone")).toString());
+                        editor.putString("email", Objects.requireNonNull(document.get("Email")).toString());
                         editor.commit();
-                    } else {
-                        Log.w("TAG", "Error getting documents.", task.getException());
-                    }
+                    } else
+                        Log.w("fbData", "Error getting documents.", task.getException());
                 });
     }
 
     // function for fetching image from firebase and storing it locally
     private void StoreImage() {
         // gets images from firebase storage
-        StorageReference pathReference = storage.getReference().child("images/" + person.getUid());
+        StorageReference pathReference = storageRef.child("images/" + person.getUid());
         pathReference.getDownloadUrl()
-                // stores default pfp if image not found on Firebase
-                .addOnFailureListener(e -> {
-            Bitmap bm = BitmapFactory.decodeResource( getResources(), R.drawable.default_pfp);
-            File directory = cw.getDir("CineMania", Context.MODE_PRIVATE);
-            File mypath = new File(directory, "profile.jpg");
-            FileOutputStream fos;
-            try {
-                fos = new FileOutputStream(mypath);
-                bm.compress(Bitmap.CompressFormat.JPEG, 100, fos);
-                fos.flush();
-                fos.close();
-            } catch (IOException z) {
-                z.printStackTrace();
-            }
-        })
-                // stores image fetched from firebase to local storage
-                .addOnSuccessListener(uri -> {
-            long MAXBYTES = 4096 * 4096;
-            pathReference.getBytes(MAXBYTES).addOnSuccessListener(bytes -> {
-                Log.i("TAG", "firebaseImageDwl: ImageDownloaded");
-                Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+             // stores default pfp if image not found on Firebase
+            .addOnFailureListener(e -> {
+                Bitmap bm = BitmapFactory.decodeResource( getResources(), R.drawable.default_pfp);
                 File directory = cw.getDir("CineMania", Context.MODE_PRIVATE);
                 File mypath = new File(directory, "profile.jpg");
                 FileOutputStream fos;
                 try {
                     fos = new FileOutputStream(mypath);
-                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);
+                    bm.compress(Bitmap.CompressFormat.JPEG, 100, fos);
                     fos.flush();
                     fos.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
+                } catch (IOException z) {
+                    z.printStackTrace();
                 }
+            })
+             // stores image fetched from firebase to local storage
+            .addOnSuccessListener(uri -> {
+                long MAXBYTES = 4096 * 4096;
+                pathReference.getBytes(MAXBYTES).addOnSuccessListener(bytes -> {
+                    Log.i("TAG", "firebaseImageDwl: ImageDownloaded");
+                    Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                    File directory = cw.getDir("CineMania", Context.MODE_PRIVATE);
+                    File mypath = new File(directory, "profile.jpg");
+                    FileOutputStream fos;
+                    try {
+                        fos = new FileOutputStream(mypath);
+                        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);
+                        fos.flush();
+                        fos.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                });
             });
-        });
     }
 
     // function for validating all input fields

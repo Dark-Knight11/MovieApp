@@ -52,8 +52,10 @@ public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.View
         holder.title.setText(res.getResults().get(position).getTitle());
         holder.desc.setText(res.getResults().get(position).getOverview());
         holder.frame.setOnClickListener(v -> {
-            if(count%2==0) holder.desc.setVisibility(View.VISIBLE);
-            else holder.desc.setVisibility(View.GONE);
+            if(count%2==0)
+                holder.desc.setVisibility(View.VISIBLE);
+            else
+                holder.desc.setVisibility(View.GONE);
             count++;
         });
         holder.date.setText("Release Date: " + res.getResults().get(position).getRelease_date());
@@ -65,9 +67,13 @@ public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.View
                 holder.star.setImageResource(R.drawable.ic_baseline_star_rate_24);
                 Map<String, Object> childUpdates = new HashMap<>();
                 childUpdates.put("id", res.getResults().get(position).getTitle());
-                mDatabase.child("Users").child(person.getUid()).child("favourites").updateChildren(childUpdates);
+                mDatabase.child("Users")
+                        .child(person.getUid())
+                        .child("favourites")
+                        .updateChildren(childUpdates);
             }
-            else holder.star.setImageResource(R.drawable.ic_baseline_star_outline_24);
+            else
+                holder.star.setImageResource(R.drawable.ic_baseline_star_outline_24);
             fav++;
         });
 //        Map<String, Object> childUpdates = new HashMap<>();
