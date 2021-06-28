@@ -5,4 +5,11 @@
         <item name="android:textColor">#D5D0D0</item>
         <item name="fontFamily">@font/poppins</item>
     </style>
+
+    <style name="CollapsedAppBar" parent="@android:style/TextAppearance.Medium">
+        <item name="android:textSize">20sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">#D5D0D0</item>
+        <item name="fontFamily">@font/poppins</item>
+    </style>
 </resources>

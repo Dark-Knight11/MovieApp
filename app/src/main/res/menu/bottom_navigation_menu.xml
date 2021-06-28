@@ -2,13 +2,6 @@
 <menu xmlns:tools="http://schemas.android.com/tools"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
-
-    <item
-        android:id="@+id/genre"
-        android:icon="@drawable/ic_baseline_star_rate_24"
-        android:title="genre"
-        tools:ignore="HardcodedText" />
-
     <item
         android:id="@+id/popular"
         android:icon="@drawable/ic_baseline_home_24"
@@ -16,9 +9,27 @@
         tools:ignore="HardcodedText" />
 
     <item
+        android:id="@+id/genre"
+        android:icon="@drawable/ic_baseline_format_list_bulleted_24"
+        android:title="genre"
+        tools:ignore="HardcodedText" />
+
+    <item
+        android:id="@+id/top"
+        android:icon="@drawable/ic_baseline_star_rate_24"
+        android:title="Top Rated"
+        tools:ignore="HardcodedText" />
+
+    <item
         android:id="@+id/profile"
         android:icon="@drawable/ic_baseline_person_24"
         android:title="Profile"
         tools:ignore="HardcodedText" />
+
+<!--    <item-->
+<!--        android:id="@+id/favourite"-->
+<!--        android:icon="@drawable/ic_baseline_favorite_24"-->
+<!--        android:title="Profile"-->
+<!--        tools:ignore="HardcodedText" />-->
 
 </menu>

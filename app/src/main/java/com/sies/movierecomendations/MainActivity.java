@@ -1,4 +1,4 @@
-package com.sies.movierecomendations.GenreRecycler;
+package com.sies.movierecomendations;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
@@ -9,22 +9,12 @@ import androidx.fragment.app.FragmentManager;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.sies.movierecomendations.Fragments.GenreFragment;
-import com.sies.movierecomendations.Fragments.PopularMovies;
+import com.sies.movierecomendations.Fragments.HomeFragment;
 import com.sies.movierecomendations.Fragments.ProfileFragment;
-import com.sies.movierecomendations.R;
+import com.sies.movierecomendations.Fragments.TopRatedFragment;
 
 public class MainActivity extends AppCompatActivity {
 
-    // ARCHIVE
-//    RecyclerView movies;
-//    GenreList res;
-//    String API_KEY = BuildConfig.API_KEY;
-//
-//    Retrofit retrofit = new Retrofit.Builder()
-//            .baseUrl("https://api.themoviedb.org/3/")
-//            .addConverterFactory(GsonConverterFactory.create())
-//            .build();
-//    MovieDbAPI movieDbAPI = retrofit.create(MovieDbAPI.class);
 
     @SuppressLint({"ResourceAsColor", "NonConstantResourceId"})
     @Override
@@ -37,15 +27,15 @@ public class MainActivity extends AppCompatActivity {
 //        View profile = findViewById(R.id.profile);
 
         FragmentManager ft = getSupportFragmentManager();
-//        ft.beginTransaction().add(R.id.fl_wrapper, new PopularMovies(), "Home").commit();
+//        ft.beginTransaction().add(R.id.fl_wrapper, new HomeFragment(), "Home").commit();
 
         final androidx.fragment.app.Fragment genre = new GenreFragment();
-        final androidx.fragment.app.Fragment popularMovies = new PopularMovies();
+        final androidx.fragment.app.Fragment popularMovies = new HomeFragment();
         final androidx.fragment.app.Fragment profile = new ProfileFragment();
+        final androidx.fragment.app.Fragment top = new TopRatedFragment();
+//        final Fragment favourite = new MyFavourite();
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
-//        bottomNavigationView.setItemIconTintList(null);
-//        bottomNavigationView.setItemTextColor(null);
 
         bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
             Fragment fragment;
@@ -59,6 +49,12 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.profile:
                     fragment = profile;
                     break;
+//                case R.id.favourite:
+//                    fragment = favourite;
+//                    break;
+                case R.id.top:
+                    fragment = top;
+                    break;
                 default:
                     fragment = popularMovies;
                     break;
@@ -67,15 +63,12 @@ public class MainActivity extends AppCompatActivity {
             return true;
         });
         bottomNavigationView.setSelectedItemId(R.id.popular);
-
-
-
-//        pop.setOnClickListener(v -> ft.beginTransaction().replace(R.id.fl_wrapper, new PopularMovies(), "Home").commit());
+    }
+}
+//        pop.setOnClickListener(v -> ft.beginTransaction().replace(R.id.fl_wrapper, new HomeFragment(), "Home").commit());
 //        genre.setOnClickListener(v -> ft.beginTransaction().replace(R.id.fl_wrapper, new GenreFragment(), "Genre").commit());
 //        profile.setOnClickListener(v -> ft.beginTransaction().replace(R.id.fl_wrapper, new ProfileFragment(), "Profile").commit());
 
-    }
-}
 
 
 // ARCHIVE
@@ -91,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
         Button pop = findViewById(R.id.pop);
 
         pop.setOnClickListener(v -> {
-        startActivity(new Intent(MainActivity.this, PopularMovies.class));
+        startActivity(new Intent(MainActivity.this, HomeFragment.class));
         });
 
 

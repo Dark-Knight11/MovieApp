@@ -10,13 +10,14 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -28,9 +29,10 @@ import java.util.regex.Pattern;
 
 public class SignUp extends AppCompatActivity {
 
-    EditText email,password,name;
-    TextView signin;
-    Button register;
+    TextInputEditText email,password,name;
+    TextInputLayout emailLayout, passwordLayout, nameLayout;
+    Button signin;
+    ImageView register;
     ProgressBar pgbar;
     private String Name, emailId, pass;
 
@@ -63,7 +65,11 @@ public class SignUp extends AppCompatActivity {
         password = findViewById(R.id.password);
         signin = findViewById(R.id.signin);
         register = findViewById(R.id.register);
-        pgbar = findViewById(R.id.progressBar2);
+        pgbar = findViewById(R.id.progressBar);
+
+        nameLayout = findViewById(R.id.name_layout);
+        emailLayout = findViewById(R.id.email_layout);
+        passwordLayout = findViewById(R.id.password_layout);
 
         // Initialize Firebase Auth
         mAuth = FirebaseAuth.getInstance();
@@ -73,48 +79,19 @@ public class SignUp extends AppCompatActivity {
             finish();
         });
 
+        name.setOnClickListener(v -> nameLayout.setError(null));
+        password.setOnClickListener(v -> passwordLayout.setError(null));
+        email.setOnClickListener(v -> emailLayout.setError(null));
+
         register.setOnClickListener(v -> {
+            nameLayout.setError(null);
+            passwordLayout.setError(null);
+            emailLayout.setError(null);
+            Name = Objects.requireNonNull(name.getText()).toString().trim();
+            pass = Objects.requireNonNull(password.getText()).toString().trim();
+            emailId = Objects.requireNonNull(email.getText()).toString().trim();
 
-            Name = name.getText().toString().trim();
-            pass = password.getText().toString().trim();
-            emailId = email.getText().toString().trim();
-
-            Matcher matcher = pattern.matcher(emailId);
-
-            // checks if name field is empty
-            if(TextUtils.isEmpty(Name)) {
-                name.setError("Name Required");
-                name.requestFocus();
-                return;
-            }
-
-            // checks if email field is empty
-            if (TextUtils.isEmpty(emailId)) {
-                email.setError("Email Required");
-                email.requestFocus();
-                return;
-            }
-
-            // checks if valid email is entered
-            if (!matcher.matches()) {
-                email.setError("Please enter valid email");
-                email.requestFocus();
-                return;
-            }
-
-            // checks if password field is empty
-            if (TextUtils.isEmpty(pass)) {
-                password.setError("Password Required");
-                password.requestFocus();
-                return;
-            }
-
-            // checks if password length is greater than 8
-            if (pass.length() < 8) {
-                password.setError("Password should be of at least 8 characters");
-                password.requestFocus();
-                return;
-            }
+            if (!fieldValidations()) return;
             pgbar.setVisibility(View.VISIBLE);
 
             Sign_Up();
@@ -167,12 +144,59 @@ public class SignUp extends AppCompatActivity {
 
         // Add a new document with a generated ID
         db.collection("Users")
-                .document((mAuth.getCurrentUser()).getUid())
+                .document((Objects.requireNonNull(mAuth.getCurrentUser())).getUid())
                 .set(userData)
                 .addOnSuccessListener(documentReference -> Log.d("TAG", "DocumentSnapshot added with ID: " + (mAuth.getCurrentUser()).getUid()))
                 .addOnFailureListener(e -> Log.w("TAG", "Error adding document", e));
         pgbar.setVisibility(View.GONE);
         startActivity(new Intent(SignUp.this, SignIn.class));
+    }
+
+    private boolean fieldValidations() {
+        Matcher matcher = pattern.matcher(emailId);
+
+        // checks if name field is empty
+        if(TextUtils.isEmpty(Name)) {
+            nameLayout.setError("Name Required");
+            nameLayout.requestFocus();
+            return false;
+        }
+
+        // checks if email field is empty
+        if (TextUtils.isEmpty(emailId)) {
+            emailLayout.setError("Email Required");
+            emailLayout.requestFocus();
+            return false;
+        }
+
+        // checks if valid email is entered
+        if (!matcher.matches()) {
+            emailLayout.setError("Please enter valid email");
+            emailLayout.requestFocus();
+            return false;
+        }
+
+        // checks if password field is empty
+        if (TextUtils.isEmpty(pass)) {
+            passwordLayout.setError("Password Required");
+            passwordLayout.requestFocus();
+            return false;
+        }
+
+        // checks if password length is greater than 8
+        if (pass.length() < 8) {
+            passwordLayout.setError("Password should be of at least 8 characters");
+            passwordLayout.requestFocus();
+            return false;
+        }
+
+        // checks if password entered in confirm password equals to password field
+//        if (confirmPass != pass) {
+//            cfpassLayout.setError("Please make sure your passwords match");
+//            return false;
+//        }
+
+        return true;
     }
 }
 
