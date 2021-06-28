@@ -21,8 +21,6 @@ import com.sies.movierecomendations.GenreRecycler.genreAdapter;
 import com.sies.movierecomendations.MovieDbAPI;
 import com.sies.movierecomendations.R;
 
-import java.util.Objects;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
