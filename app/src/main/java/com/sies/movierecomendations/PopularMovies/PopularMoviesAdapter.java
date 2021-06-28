@@ -1,5 +1,6 @@
 package com.sies.movierecomendations.PopularMovies;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -13,6 +14,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.sies.movierecomendations.MovieScreen;
 import com.sies.movierecomendations.MoviesApi.MoviesList;
 import com.sies.movierecomendations.R;
 
@@ -20,6 +22,7 @@ public class PopularMoviesAdapter extends RecyclerView.Adapter<PopularMoviesAdap
 
     private Context context;
     MoviesList res;
+    private String[] data = {"1st string", "2nd string", "3rd string", "4th string", "5th string", "6th string", "7th string", "8th string", "9th string", "10th string", "11th string"};
 
     public PopularMoviesAdapter(MoviesList res) { this.res = res; }
 
@@ -27,13 +30,13 @@ public class PopularMoviesAdapter extends RecyclerView.Adapter<PopularMoviesAdap
     @Override
     public PopularMoviesAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         context = parent.getContext();
-        View view = LayoutInflater.from(context).inflate(R.layout.popular_movies_list, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.popular_and_trending_movies_card, parent, false);
         return new PopularMoviesAdapter.ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull PopularMoviesAdapter.ViewHolder holder, int position) {
-        Glide.with(holder.itemView.getContext()).load("https://image.tmdb.org/t/p/w500"+ res.getResults().get(position).getPoster_path()).into(holder.poster);
+        Glide.with(context).load("https://image.tmdb.org/t/p/w500"+ res.getResults().get(position).getPoster_path()).into(holder.poster);
         holder.movieName.setText(res.getResults().get(position).getTitle());
         holder.card.setOnClickListener(v -> {
             Intent intent = new Intent(context, MovieScreen.class);
@@ -42,6 +45,7 @@ public class PopularMoviesAdapter extends RecyclerView.Adapter<PopularMoviesAdap
             intent.putExtra("release-date", res.getResults().get(position).getRelease_date());
             intent.putExtra("rating", res.getResults().get(position).getVote_average());
             intent.putExtra("overview", res.getResults().get(position).getOverview());
+            intent.putExtra("id", res.getResults().get(position).getId());
             context.startActivity(intent);
         });
     }
@@ -54,14 +58,16 @@ public class PopularMoviesAdapter extends RecyclerView.Adapter<PopularMoviesAdap
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         private final ImageView poster;
-        private final TextView movieName;
+        private TextView movieName;
         private final ConstraintLayout card;
+        @SuppressLint("NewApi")
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
             poster = itemView.findViewById(R.id.poster);
             movieName = itemView.findViewById(R.id.movieName);
             card = itemView.findViewById(R.id.movieCard);
+            poster.setClipToOutline(true);
         }
     }
 }
