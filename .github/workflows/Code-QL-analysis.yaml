@@ -14,10 +14,10 @@ name: CodeQL
 on:
   push:
     branches: [ development ]
-    paths-ignore: [ '*.md', '*.xml' ]
+    paths-ignore: [ '*.md', '*/**.xml' ]
   pull_request:
     branches: [ main, development ]
-    paths-ignore: [ '*.md', '*.xml' ]
+    paths-ignore: [ '*.md', '*/**.xml' ]
 
 jobs:
   analyze:

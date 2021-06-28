@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="popMovies" type="id" />
+    <item name="collapsingLayout" type="id" />
+    <item name="header" type="id" />
+    <item name="tabs" type="id" />
+    <item name="collapse_toolbar" type="id" />
+    <item name="appbar" type="id" />
+</resources>

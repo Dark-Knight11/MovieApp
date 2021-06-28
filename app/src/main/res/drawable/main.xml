@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--<vector-->
+<!--    xmlns:android="http://schemas.android.com/apk/res/android"-->
+<!--    xmlns:aapt="http://schemas.android.com/aapt"-->
+<!--    xmlns:tools="http://schemas.android.com/tools"-->
+<!--    android:width="360dp"-->
+<!--    android:height="640dp"-->
+<!--    android:viewportWidth="360"-->
+<!--    android:viewportHeight="640"-->
+<!--    >-->
+
+<!--    <group>-->
+
+<!--        <clip-path-->
+<!--            android:pathData="M0 0H360V640H0V0Z"-->
+<!--            tools:ignore="VectorRaster" />-->
+
+<!--        <group-->
+<!--            android:translateX="1.01"-->
+<!--            android:translateY="-0.041"-->
+<!--            android:pivotX="180"-->
+<!--            android:pivotY="320"-->
+<!--            android:scaleX="2.08"-->
+<!--            android:scaleY="2.08"-->
+<!--            android:rotation="89.464"-->
+<!--            >-->
+
+<!--            <path-->
+<!--                android:pathData="M0 0V640H360V0"-->
+<!--                >-->
+
+<!--                <aapt:attr name="android:fillColor">-->
+
+<!--                    <gradient-->
+<!--                        android:type="linear"-->
+<!--                        android:startX="90"-->
+<!--                        android:startY="320"-->
+<!--                        android:endX="270"-->
+<!--                        android:endY="320"-->
+<!--                        >-->
+
+<!--                        <item-->
+<!--                            android:color="#C1206E"-->
+<!--                            android:offset="0"-->
+<!--                            />-->
+
+<!--                        <item-->
+<!--                            android:color="#163560"-->
+<!--                            android:offset="0.864"-->
+<!--                            />-->
+
+<!--                    </gradient>-->
+
+<!--                </aapt:attr>-->
+
+<!--            </path>-->
+
+<!--        </group>-->
+
+<!--    </group>-->
+
+<!--</vector>-->
+<vector
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:width="360dp"
+    android:height="640dp"
+    android:viewportWidth="360"
+    android:viewportHeight="640"
+    tools:ignore="VectorRaster">
+
+    <group>
+
+        <clip-path
+            android:pathData="M0 0H360V640H0V0Z"
+            tools:ignore="VectorRaster" />
+
+        <group
+            android:translateX="0.522"
+            android:translateY="-0.131"
+            android:pivotX="180"
+            android:pivotY="320"
+            android:scaleX="2.596"
+            android:scaleY="2.067"
+            android:rotation="50.383"
+            >
+
+            <path
+                android:pathData="M0 0V640H360V0"
+                >
+
+                <aapt:attr name="android:fillColor">
+
+                    <gradient
+                        android:type="linear"
+                        android:startX="90"
+                        android:startY="320"
+                        android:endX="270"
+                        android:endY="320"
+                        >
+
+                        <item
+                            android:color="#201A2D"
+                            android:offset="0"
+                            />
+
+                        <item
+                            android:color="#1A1B22"
+                            android:offset="1"
+                            />
+
+                    </gradient>
+
+                </aapt:attr>
+
+            </path>
+
+        </group>
+
+    </group>
+
+</vector>

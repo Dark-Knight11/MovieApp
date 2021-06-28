@@ -1,11 +1,11 @@
-package com.sies.movierecomendations.MoviesRecycler;
+package com.sies.movierecomendations.GenreMoviesRecycler;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -21,7 +21,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 @SuppressWarnings("ALL")
-public class Movies extends AppCompatActivity {
+public class GenreMovies extends AppCompatActivity {
     MoviesList res;
     String API_KEY = BuildConfig.API_KEY;
     RecyclerView moviesRecyclerView;
@@ -35,15 +35,20 @@ public class Movies extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_movies);
+        setContentView(R.layout.activity_genre_movies);
 
 
         Intent intent = getIntent();
         int value = intent.getIntExtra("genreId", 12);
+        String name = intent.getStringExtra("genre");
         getApi(value);
 
         moviesRecyclerView = findViewById(R.id.recyclerView);
-        moviesRecyclerView.setLayoutManager(new LinearLayoutManager(Movies.this));
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar.setTitle(name);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        moviesRecyclerView.setLayoutManager(new LinearLayoutManager(GenreMovies.this));
 
     }
 
@@ -52,8 +57,7 @@ public class Movies extends AppCompatActivity {
             @Override
             public void onResponse(Call<MoviesList> call, Response<MoviesList> response) {
                 res = response.body();
-                Toast.makeText(Movies.this, "No of movies: " + Integer.toString(res.getResults().size()), Toast.LENGTH_SHORT).show();
-                moviesRecyclerView.setAdapter(new MovieListAdapter(res));
+                moviesRecyclerView.setAdapter(new GenreMovieListAdapter(res));
             }
 
             @Override
@@ -61,6 +65,11 @@ public class Movies extends AppCompatActivity {
                 Log.i("onFailure: ", t.getMessage());
             }
         });
+    }
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
     }
 
 

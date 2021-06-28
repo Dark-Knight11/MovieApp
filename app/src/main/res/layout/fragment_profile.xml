@@ -1,120 +1,133 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:overScrollMode="never"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".Fragments.ProfileFragment">
+    android:layout_height="match_parent" >
 
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/pfp"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
-        android:src="@drawable/default_pfp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.120000005"
-        tools:ignore="ContentDescription" />
-
-
-    <EditText
-        android:id="@+id/name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:hint="Name"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/pfp"
-        android:importantForAutofill="no"
-        tools:ignore="HardcodedText,LabelFor" />
-
-    <EditText
-        android:id="@+id/phone"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:ems="10"
-        android:inputType="phone"
-        android:hint="Phone Number"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/name"
-        tools:ignore="HardcodedText,LabelFor,MissingConstraints"
-        android:importantForAutofill="no" />
-
-    <TextView
-        android:id="@+id/email"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:padding="10dp"
-        android:textSize="20sp"
-        tools:text="vedantbhamare11@gmail.com"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/phone"
-        android:importantForAutofill="no" />
-
-    <ScrollView
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:overScrollMode="never"
-        app:layout_constraintTop_toBottomOf="@+id/email" >
+        android:layout_height="wrap_content"
+        tools:context=".Fragments.ProfileFragment">
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:paddingBottom="15dp"
-            android:layout_height="wrap_content" >
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/pfp"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:src="@drawable/default_pfp"
+            android:layout_marginTop="30dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0"
+            tools:ignore="ContentDescription" />
 
-            <Button
-                android:id="@+id/logout"
+
+        <EditText
+            android:id="@+id/name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:hint="Name"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.497"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/pfp"
+            android:importantForAutofill="no"
+            tools:ignore="HardcodedText,LabelFor" />
+
+        <EditText
+            android:id="@+id/phone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:ems="10"
+            android:inputType="phone"
+            android:hint="Phone Number"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/name"
+            tools:ignore="HardcodedText,LabelFor,MissingConstraints"
+            android:importantForAutofill="no" />
+
+        <TextView
+            android:id="@+id/email"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:padding="10dp"
+            android:textSize="20sp"
+            tools:text="vedantbhamare11@gmail.com"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/phone"
+            android:importantForAutofill="no" />
+
+
+
+            <RelativeLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:layout_centerHorizontal="true"
-                android:text="@string/logout" />
+                android:layout_marginBottom="15dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/email" >
 
-            <Button
-                android:id="@+id/update"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:text="Update"
-                android:layout_centerHorizontal="true"
-                android:layout_below="@id/logout"
-                tools:ignore="HardcodedText" />
+                <Button
+                    android:id="@+id/logout"
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_below="@id/upload"
+                    android:backgroundTint="#232234"
+                    android:textColor="@color/white"
+                    android:text="@string/logout"
+                    tools:targetApi="lollipop" />
 
-            <Button
-                android:id="@+id/upload"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:text="Upload"
-                android:layout_centerHorizontal="true"
-                android:layout_below="@+id/update"
-                tools:ignore="HardcodedText" />
+                <Button
+                    android:id="@+id/update"
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:text="Update"
+                    android:layout_centerHorizontal="true"
+                    android:backgroundTint="#232234"
+                    android:textColor="@color/white"
+                    tools:ignore="HardcodedText"
+                    tools:targetApi="lollipop" />
 
-            <Button
-                android:id="@+id/select"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:text="Select Image"
-                android:layout_centerHorizontal="true"
-                android:layout_below="@+id/upload"
-                tools:ignore="HardcodedText" />
+                <Button
+                    android:id="@+id/upload"
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:text="Upload"
+                    android:layout_centerHorizontal="true"
+                    android:layout_below="@+id/select"
+                    android:backgroundTint="#232234"
+                    android:textColor="@color/white"
+                    tools:ignore="HardcodedText"
+                    tools:targetApi="lollipop" />
 
-        </RelativeLayout>
-    </ScrollView>
+                <Button
+                    android:id="@+id/select"
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:text="Select Image"
+                    android:layout_centerHorizontal="true"
+                    android:layout_below="@+id/update"
+                    android:backgroundTint="#232234"
+                    android:textColor="@color/white"
+                    tools:ignore="HardcodedText"
+                    tools:targetApi="lollipop" />
+            </RelativeLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>
