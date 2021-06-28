@@ -48,6 +48,7 @@ public class TopRatedFragment extends Fragment {
         viewPager = view.findViewById(R.id.pager);
         tabLayout = view.findViewById(R.id.tabLayout);
 
+        fragments = new ArrayList<>();
         fragments.add(new topMovies());
         fragments.add(new topTv());
 

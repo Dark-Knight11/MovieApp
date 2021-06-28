@@ -39,10 +39,6 @@ public class topMovies extends Fragment {
         // Required empty public constructor
     }
 
-    public static topMovies newInstance(String param1, String param2) {
-        return new topMovies();
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
