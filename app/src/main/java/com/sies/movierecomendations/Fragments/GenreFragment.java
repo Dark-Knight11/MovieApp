@@ -12,7 +12,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.sies.movierecomendations.BuildConfig;
@@ -20,6 +20,8 @@ import com.sies.movierecomendations.GenreApi.GenreList;
 import com.sies.movierecomendations.GenreRecycler.genreAdapter;
 import com.sies.movierecomendations.MovieDbAPI;
 import com.sies.movierecomendations.R;
+
+import java.util.Objects;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -99,7 +101,7 @@ public class GenreFragment extends Fragment {
         }
 
         movies = view.findViewById(R.id.movies);
-        movies.setLayoutManager(new LinearLayoutManager(getContext()));
+        movies.setLayoutManager(new GridLayoutManager(getContext(), 2));
 
         movieDbAPI.getGenre(API_KEY).enqueue(new Callback<GenreList>() {
             @Override
@@ -123,7 +125,7 @@ public class GenreFragment extends Fragment {
         boolean have_WIFI = false;
         boolean have_MobileData = false;
 
-        ConnectivityManager connectivityManager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+        ConnectivityManager connectivityManager = (ConnectivityManager) requireActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo[] networkInfos = connectivityManager.getAllNetworkInfo();
 
         for(NetworkInfo info: networkInfos) {
