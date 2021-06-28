@@ -11,21 +11,20 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.sies.movierecomendations.GenreApi.GenreList;
-import com.sies.movierecomendations.MoviesRecycler.Movies;
+import com.sies.movierecomendations.GenreMoviesRecycler.GenreMovies;
 import com.sies.movierecomendations.R;
 
 public class genreAdapter extends RecyclerView.Adapter<genreAdapter.ViewHolder> {
 
     GenreList res;
     private Context context;
-
     public genreAdapter(GenreList res) { this.res = res; }
 
     @NonNull
     @Override
     public genreAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         context = parent.getContext();
-        View view = LayoutInflater.from(context).inflate(R.layout.activity_genre, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.genre_list_card, parent, false);
         return new ViewHolder(view);
     }
 
@@ -47,8 +46,9 @@ public class genreAdapter extends RecyclerView.Adapter<genreAdapter.ViewHolder> 
 //            at.beginTransaction().replace(R.id.genre, moviesCardFragment).addToBackStack(null).commit();
 
 
-            Intent intent = new Intent(context, Movies.class);
+            Intent intent = new Intent(context, GenreMovies.class);
             intent.putExtra("genreId", res.getGenres().get(position).getId());
+            intent.putExtra("genre", res.getGenres().get(position).getName());
             context.startActivity(intent);
         });
     }

@@ -18,7 +18,8 @@
         android:roundIcon="@drawable/icon"
         android:supportsRtl="true"
         android:theme="@style/Theme.MaterialComponents.NoActionBar"
-        tools:ignore="AllowBackup">
+        tools:ignore="AllowBackup"
+        tools:replace="android:label">
         <activity android:name=".SignIn">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -27,14 +28,12 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".PopularMovies.MovieScreen"/>
-<!--        <activity android:name=".PopularMovies.PopularMovies" />-->
-<!--        <activity android:name=".Profile" />-->
+        <activity android:name=".MovieScreen"/>
         <activity android:name=".ForgotPassword" />
-        <activity android:name=".MoviesRecycler.Movies" />
+        <activity android:name=".GenreMoviesRecycler.GenreMovies" />
         <activity android:name=".SignUp" />
         <activity android:name=".FullScreenPFP" />
-        <activity android:name=".GenreRecycler.MainActivity" />
+        <activity android:name=".MainActivity" />
         <activity
             android:name="com.canhub.cropper.CropImageActivity"
             android:theme="@style/Base.Theme.AppCompat" />

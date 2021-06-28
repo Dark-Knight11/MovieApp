@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/bg_theme"
-    tools:context=".SignIn">
+    tools:context=".SignIn" >
 
     <ImageView
-        android:id="@+id/imageView2"
+        android:id="@+id/upperBlob"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:scaleType="fitXY"
@@ -22,31 +23,16 @@
         tools:ignore="ContentDescription" />
 
     <ImageView
-        android:id="@+id/imageView3"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:scaleType="fitXY"
-        android:src="@drawable/ic_bottom_red_blob"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0"
-        tools:ignore="ContentDescription" />
-
-    <ImageView
         android:id="@+id/title"
         android:layout_width="wrap_content"
-        android:layout_height="48dp"
-        android:layout_marginTop="160dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="10dp"
         android:layout_marginEnd="20dp"
         android:src="@drawable/logo"
-        android:textAlignment="center"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/upperBlob"
         app:layout_constraintVertical_bias="0.0"
         tools:ignore="ContentDescription" />
 
@@ -58,41 +44,12 @@
         android:text="Login"
         android:textColor="@color/white"
         android:textAlignment="center"
-        android:textSize="30sp"
+        android:textSize="25sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/title"
         app:layout_constraintVertical_bias="0.0"
-        tools:ignore="HardcodedText" />
-
-    <TextView
-        android:id="@+id/forgotPassword"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="20dp"
-        android:text="@string/forgot_password"
-        android:textColor="@color/white"
-        android:textSize="15sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/resend" />
-
-    <TextView
-        android:id="@+id/resend"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="15dp"
-        android:layout_marginTop="20dp"
-        android:text="Resend email"
-        android:textColor="@color/white"
-        android:textSize="15sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/loginfocont"
         tools:ignore="HardcodedText" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -111,18 +68,6 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             android:layout_marginEnd="50dp" >
-<!--    <ImageView-->
-<!--        android:id="@+id/rect"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:src="@drawable/rectangle"-->
-<!--        android:layout_marginTop="30dp"-->
-<!--        app:layout_constraintBottom_toBottomOf="parent"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintHorizontal_bias="0.0"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintVertical_bias="0.0"-->
-<!--        tools:ignore="ContentDescription" />-->
 
             <EditText
                 android:id="@+id/email"
@@ -139,10 +84,10 @@
                 android:hint="Email"
                 android:importantForAutofill="no"
                 android:inputType="textEmailAddress"
-                android:textColor="#F1FAEE"
-                android:textColorHint="#F1FAEE"
+                android:textColor="@color/cream_white"
+                android:textColorHint="@color/cream_white"
                 android:textSize="15sp"
-                tools:ignore="HardcodedText,TextFields" />
+                tools:ignore="HardcodedText" />
 
             <View
                 android:id="@+id/divider"
@@ -154,16 +99,6 @@
                 android:layout_below="@id/email"
                 android:layout_marginEnd="40dp"/>
 
-<!--    <ImageView-->
-<!--        android:id="@+id/line"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_marginTop="60dp"-->
-<!--        android:src="@drawable/line"-->
-<!--        app:layout_constraintTop_toTopOf="@id/rect"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintVertical_bias="0.0"-->
-<!--        app:layout_constraintBottom_toBottomOf="parent"/>-->
 
             <EditText
                 android:id="@+id/password"
@@ -177,8 +112,8 @@
                 android:drawableStart="@drawable/ic_lock"
                 android:drawablePadding="20dp"
                 android:layout_marginStart="30dp"
-                android:textColor="#F1FAEE"
-                android:textColorHint="#F1FAEE"
+                android:textColor="@color/cream_white"
+                android:textColorHint="@color/cream_white"
                 android:layout_below="@id/divider"
                 android:background="@null"
                 tools:ignore="HardcodedText,TextFields"
@@ -199,29 +134,29 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-
-<!--    <ImageView-->
-<!--        android:id="@+id/login"-->
-<!--        android:layout_width="90dp"-->
-<!--        android:layout_height="90dp"-->
-<!--        android:layout_marginTop="16dp"-->
-<!--        android:scaleType="fitXY"-->
-<!--        android:src="@drawable/login_button"-->
-<!--        app:layout_constraintBottom_toBottomOf="parent"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintHorizontal_bias="0.0"-->
-<!--        app:layout_constraintStart_toEndOf="@id/rect"-->
-<!--        app:layout_constraintTop_toTopOf="@+id/rect"-->
-<!--        app:layout_constraintVertical_bias="0.0"-->
-<!--        tools:ignore="ContentDescription" />-->
-
+    <Button
+        android:id="@+id/forgotPassword"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="@string/forgot_password"
+        android:paddingEnd="15dp"
+        android:background="@android:color/transparent"
+        android:textColor="@color/cream_white"
+        android:textAllCaps="false"
+        android:fontFamily="@font/pt_sans"
+        android:textSize="15sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/loginfocont"
+        tools:ignore="RtlSymmetry" />
 
     <ImageView
         android:id="@+id/signup"
         android:layout_width="84dp"
         android:layout_height="31dp"
         android:layout_marginStart="15dp"
-        android:layout_marginTop="10dp"
         android:src="@drawable/register"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -229,20 +164,51 @@
         app:layout_constraintTop_toBottomOf="@+id/forgotPassword"
         tools:ignore="ContentDescription" />
 
+    <Button
+        android:id="@+id/resend"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:paddingStart="15dp"
+        android:text="Resend verification email"
+        android:background="@android:color/transparent"
+        android:textAllCaps="false"
+        android:fontFamily="@font/pt_sans"
+        android:textColor="@color/cream_white"
+        android:textSize="15sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/signup"
+        tools:ignore="HardcodedText,RtlSymmetry" />
+
     <ProgressBar
         android:id="@+id/progressBar"
         style="?android:attr/progressBarStyle"
+        android:indeterminateTint="#5EFF8B"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="20dp"
         android:visibility="gone"
-        android:outlineAmbientShadowColor="@color/purple_500"
-        android:outlineSpotShadowColor="@color/purple_500"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/signup"
-        tools:ignore="UnusedAttribute"
-        tools:visibility="invisible" />
+        app:layout_constraintTop_toBottomOf="@+id/resend"
+        tools:visibility="visible"
+        tools:targetApi="lollipop" />
+
+    <ImageView
+        android:id="@+id/lowerBlob"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scaleType="fitXY"
+        android:src="@drawable/ic_bottom_red_blob"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0"
+        tools:ignore="ContentDescription" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 
