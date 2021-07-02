@@ -4,7 +4,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/movieCard"
-    android:layout_width="wrap_content"
+    android:layout_width="150dp"
+    android:layout_marginBottom="20dp"
     android:layout_height="match_parent" >
 
     <ImageView
@@ -18,19 +19,20 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="ContentDescription" />
 
-    <TextView
-        android:id="@+id/movieName"
-        android:layout_width="150dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:layout_marginBottom="5dp"
-        android:text="@string/logout"
-        android:textAlignment="center"
-        android:textSize="15sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/poster"
-        app:layout_constraintVertical_bias="0.0" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+
+<!--<TextView-->
+<!--android:id="@+id/movieName"-->
+<!--android:layout_width="150dp"-->
+<!--android:layout_height="wrap_content"-->
+<!--android:layout_marginTop="5dp"-->
+<!--android:layout_marginBottom="5dp"-->
+<!--android:text="@string/logout"-->
+<!--android:textAlignment="center"-->
+<!--android:textSize="15sp"-->
+<!--app:layout_constraintBottom_toBottomOf="parent"-->
+<!--app:layout_constraintEnd_toEndOf="parent"-->
+<!--app:layout_constraintStart_toStartOf="parent"-->
+<!--app:layout_constraintTop_toBottomOf="@id/poster"-->
+<!--app:layout_constraintVertical_bias="0.0" />-->

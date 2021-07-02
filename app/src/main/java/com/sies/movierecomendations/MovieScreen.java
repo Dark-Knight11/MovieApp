@@ -76,7 +76,7 @@ public class MovieScreen extends AppCompatActivity {
             public void onResponse(@NonNull Call<VideosList> call, @NonNull Response<VideosList> response) {
                 resv = response.body();
                 Log.i("onResponse: ", String.valueOf(response.body()));
-                if (resv.getResults().size()>0){
+                if (response.body()!=null && resv.getResults().size()>0){
                     key = resv.getResults().get(0).getKey();
                     youtube.setText("https://www.youtube.com/watch?v=" + key);
                     youtube.setOnClickListener(v -> {

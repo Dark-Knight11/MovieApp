@@ -48,4 +48,10 @@ public interface MovieDbAPI {
     Call<MoviesList> getTrending(
             @Query("api_key") String key
     );
+
+    @GET("search/multi")
+    Call<MoviesList> getSearchResult(
+            @Query("api_key") String key,
+            @Query("query") String query
+    );
 }

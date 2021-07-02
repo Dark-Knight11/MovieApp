@@ -7,7 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -37,7 +36,7 @@ public class PopularMoviesAdapter extends RecyclerView.Adapter<PopularMoviesAdap
     @Override
     public void onBindViewHolder(@NonNull PopularMoviesAdapter.ViewHolder holder, int position) {
         Glide.with(context).load("https://image.tmdb.org/t/p/w500"+ res.getResults().get(position).getPoster_path()).into(holder.poster);
-        holder.movieName.setText(res.getResults().get(position).getTitle());
+//        holder.movieName.setText(res.getResults().get(position).getTitle());
         holder.card.setOnClickListener(v -> {
             Intent intent = new Intent(context, MovieScreen.class);
             intent.putExtra("backdrop-path", res.getResults().get(position).getBackdrop_path());
@@ -58,14 +57,14 @@ public class PopularMoviesAdapter extends RecyclerView.Adapter<PopularMoviesAdap
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         private final ImageView poster;
-        private TextView movieName;
+//        private TextView movieName;
         private final ConstraintLayout card;
         @SuppressLint("NewApi")
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
             poster = itemView.findViewById(R.id.poster);
-            movieName = itemView.findViewById(R.id.movieName);
+//            movieName = itemView.findViewById(R.id.movieName);
             card = itemView.findViewById(R.id.movieCard);
             poster.setClipToOutline(true);
         }

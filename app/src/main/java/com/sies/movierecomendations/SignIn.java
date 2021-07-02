@@ -62,6 +62,20 @@ public class SignIn extends AppCompatActivity {
     private final String regex = "^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$";
     private final Pattern pattern = Pattern.compile(regex);
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        mAuth = FirebaseAuth.getInstance();
+        person = mAuth.getCurrentUser();
+        // CHECKS IF USER IS ALREADY LOGGED IN
+        if (person != null && person.isEmailVerified()) {
+            startActivity(new Intent(SignIn.this, MainActivity.class));
+            finish();
+        }
+
+    }
+
     @SuppressLint("CommitPrefEdits")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,15 +84,6 @@ public class SignIn extends AppCompatActivity {
         if(!networkWhere())
             Toast.makeText(SignIn.this, "No Internet Found", Toast.LENGTH_SHORT).show();
 
-        mAuth = FirebaseAuth.getInstance();
-        person = mAuth.getCurrentUser();
-
-        // CHECKS IF USER IS ALREADY LOGGED IN
-        if (person != null && person.isEmailVerified()) {
-            Toast.makeText(SignIn.this, "You are Logged in", Toast.LENGTH_SHORT).show();
-            startActivity(new Intent(SignIn.this, MainActivity.class));
-            finish();
-        }
         setContentView(R.layout.activity_sign_in);
         sharedPreferences = getSharedPreferences("com.sies.cinemania.PREFERENCE_FILE_KEY", Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
@@ -112,7 +117,7 @@ public class SignIn extends AppCompatActivity {
             pgbar.setVisibility(View.VISIBLE);
             mAuth.signInWithEmailAndPassword(emailId, password).addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
-                    mAuth.getCurrentUser().sendEmailVerification().addOnCompleteListener(task1 -> {
+                    Objects.requireNonNull(mAuth.getCurrentUser()).sendEmailVerification().addOnCompleteListener(task1 -> {
                         if (task1.isSuccessful())
                             Toast.makeText(SignIn.this, "Please Check your Email for Verification link", Toast.LENGTH_SHORT).show();
                         else {
