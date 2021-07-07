@@ -17,9 +17,10 @@
         android:label="CineMania"
         android:roundIcon="@drawable/icon"
         android:supportsRtl="true"
-        android:theme="@style/Theme.MaterialComponents.NoActionBar"
+        android:theme="@style/Theme.MovieRecomendations"
         tools:ignore="AllowBackup"
         tools:replace="android:label">
+        <activity android:name=".SearchActivity" />
         <activity android:name=".SignIn">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -27,8 +28,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity android:name=".MovieScreen"/>
+        <activity android:name=".MovieScreen" />
         <activity android:name=".ForgotPassword" />
         <activity android:name=".GenreMoviesRecycler.GenreMovies" />
         <activity android:name=".SignUp" />
