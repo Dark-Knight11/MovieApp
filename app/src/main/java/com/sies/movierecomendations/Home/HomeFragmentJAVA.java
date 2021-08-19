@@ -1,4 +1,4 @@
-package com.sies.movierecomendations.Fragments;
+package com.sies.movierecomendations.Home;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -30,7 +30,7 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class HomeFragment extends Fragment {
+public class HomeFragmentJAVA extends Fragment {
 
     MoviesList res;
     String API_KEY = BuildConfig.API_KEY;
@@ -55,14 +55,6 @@ public class HomeFragment extends Fragment {
             .build();
     MovieDbAPI movieDbAPI = retrofit.create(MovieDbAPI.class);
 
-    public HomeFragment() {
-        // Required empty public constructor
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -138,4 +130,3 @@ public class HomeFragment extends Fragment {
         carouselView.setPageCount(banner.length);
     }
 }
-

@@ -2,17 +2,14 @@ package com.sies.movierecomendations;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.sies.movierecomendations.Fragments.GenreFragment;
-import com.sies.movierecomendations.Fragments.HomeFragment;
 import com.sies.movierecomendations.Fragments.ProfileFragment;
 import com.sies.movierecomendations.Fragments.TopRatedFragment;
-
+import com.sies.movierecomendations.Home.HomeFragment;
 public class MainActivity extends AppCompatActivity {
 
 
@@ -22,12 +19,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-//        View pop = findViewById(R.id.popular);
-//        View genre = findViewById(R.id.genre);
-//        View profile = findViewById(R.id.profile);
-
         FragmentManager ft = getSupportFragmentManager();
-//        ft.beginTransaction().add(R.id.fl_wrapper, new HomeFragment(), "Home").commit();
 
         final androidx.fragment.app.Fragment genre = new GenreFragment();
         final androidx.fragment.app.Fragment popularMovies = new HomeFragment();
