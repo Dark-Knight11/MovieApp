@@ -4,6 +4,7 @@ buildscript {
     ext {
         version_kotlin = "1.5.21"
         version_lifecycle = "2.3.1"
+        version_navigation = "2.3.5"
     }
 
     repositories {
@@ -14,6 +15,7 @@ buildscript {
         classpath "com.android.tools.build:gradle:7.0.0"
         classpath "com.google.gms:google-services:4.3.10"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$version_kotlin"
+        classpath "androidx.navigation:navigation-safe-args-gradle-plugin:$version_navigation"
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files

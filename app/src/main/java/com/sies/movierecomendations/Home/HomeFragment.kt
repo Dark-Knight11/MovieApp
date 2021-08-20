@@ -20,14 +20,7 @@ import com.synnapps.carouselview.ImageListener
 
 class HomeFragment: Fragment() {
 
-    private val images = arrayOf(
-        "https://image.tmdb.org/t/p/original/srYya1ZlI97Au4jUYAktDe3avyA.jpg",
-        "https://image.tmdb.org/t/p/original/9yBVqNruk6Ykrwc32qrK2TIE5xw.jpg",
-        "https://image.tmdb.org/t/p/original/inJjDhCjfhh3RtrJWBmmDqeuSYC.jpg",
-        "https://image.tmdb.org/t/p/original/gGSm6ZmWtGazs2H1m0gOp7cx1ZZ.jpg",
-        "https://image.tmdb.org/t/p/original/pcDc2WJAYGJTTvRSEIpRZwM3Ola.jpg",
-        "https://image.tmdb.org/t/p/original/2lBOQK06tltt8SQaswgb8d657Mv.jpg"
-    )
+
     var imageListener: ImageListener? = null
     lateinit var binding: FragmentHomeBinding
 
@@ -41,7 +34,8 @@ class HomeFragment: Fragment() {
         binding.lifecycleOwner = viewLifecycleOwner
         Log.i("HomeFragment", "onCreateView was called")
 
-        setUpBanner(images)
+        setUpBanner(viewModel.images)
+        Log.i("Images", viewModel.images[0])
 
         binding.toolbar.setOnMenuItemClickListener { item ->
             if (item.itemId == R.id.search)
@@ -61,16 +55,8 @@ class HomeFragment: Fragment() {
         return binding.root
     }
 
-    // Settings for carousel view
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        binding.carousel.pageCount = images.size
-        binding.carousel.setImageListener(imageListener)
-
-        Log.i("HomeFragment", "onViewCreated was called")
-    }
-
     // Carousel View
-    private fun setUpBanner(banner: Array<String>) {
+    private fun setUpBanner(banner: ArrayList<String>) {
         imageListener = ImageListener { position: Int, imageView: ImageView? ->
             Glide.with(this)
                 .load(banner[position])
@@ -104,6 +90,4 @@ class HomeFragment: Fragment() {
         super.onResume()
         Log.i("HomeFragment", "onResume was called")
     }
-
-
 }

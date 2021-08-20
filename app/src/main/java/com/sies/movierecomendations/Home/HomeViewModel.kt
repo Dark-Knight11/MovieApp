@@ -19,6 +19,8 @@ class HomeViewModel: ViewModel() {
         const val API_KEY = BuildConfig.API_KEY
     }
 
+    val images: ArrayList<String> = ArrayList()
+
     private val _popularMovies = MutableLiveData<MoviesList>()
     val popularMovies: LiveData<MoviesList>
         get() = _popularMovies
@@ -58,6 +60,9 @@ class HomeViewModel: ViewModel() {
             override fun onResponse(call: Call<MoviesList>, response: Response<MoviesList>) {
                 val res = response.body()
                 _trendingMovies.value = res
+                for(i in 0..4) {
+                    images.add("https://image.tmdb.org/t/p/original" + res!!.results[i].backdrop_path)
+                }
             }
 
             override fun onFailure(call: Call<MoviesList>, t: Throwable) {

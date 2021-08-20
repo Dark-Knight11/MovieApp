@@ -3,25 +3,25 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/popular"
+        android:id="@+id/homeFragment"
         android:icon="@drawable/ic_baseline_home_24"
         android:title="Home"
         tools:ignore="HardcodedText" />
 
     <item
-        android:id="@+id/genre"
+        android:id="@+id/genreFragment"
         android:icon="@drawable/ic_baseline_format_list_bulleted_24"
         android:title="genre"
         tools:ignore="HardcodedText" />
 
     <item
-        android:id="@+id/top"
+        android:id="@+id/topRatedFragment"
         android:icon="@drawable/ic_baseline_star_rate_24"
         android:title="Top Rated"
         tools:ignore="HardcodedText" />
 
     <item
-        android:id="@+id/profile"
+        android:id="@+id/profileFragment"
         android:icon="@drawable/ic_baseline_person_24"
         android:title="Profile"
         tools:ignore="HardcodedText" />
