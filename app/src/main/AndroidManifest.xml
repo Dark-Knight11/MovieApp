@@ -20,19 +20,20 @@
         android:theme="@style/Theme.MovieRecomendations"
         tools:ignore="AllowBackup"
         tools:replace="android:label">
-        <activity android:name=".SearchActivity" />
-        <activity android:name=".SignIn">
+        <activity android:name=".Search.ui.SearchActivity" />
+        <activity android:name=".EntryPages.SignIn"
+            tools:ignore="IntentFilterExportedReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MovieScreen" />
-        <activity android:name=".ForgotPassword" />
-        <activity android:name=".GenreMoviesRecycler.GenreMovies" />
-        <activity android:name=".SignUp" />
-        <activity android:name=".FullScreenPFP" />
+        <activity android:name=".MovieDetails.ui.MovieDetails" />
+        <activity android:name=".EntryPages.ForgotPassword" />
+        <activity android:name=".Genre.ui.GenreMovies" />
+        <activity android:name=".EntryPages.SignUp" />
+        <activity android:name=".Profile.FullScreenPFP" />
         <activity android:name=".MainActivity" />
         <activity
             android:name="com.canhub.cropper.CropImageActivity"

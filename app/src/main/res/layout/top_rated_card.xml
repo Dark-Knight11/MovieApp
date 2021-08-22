@@ -8,7 +8,7 @@
     android:padding="10dp"
     android:layout_marginBottom="10dp"
     android:layout_marginTop="10dp"
-    tools:context=".Fragments.TopRatedFragment">
+    tools:context=".TopRated.ui.TopRatedFragment">
 
     <View
         android:id="@+id/view"

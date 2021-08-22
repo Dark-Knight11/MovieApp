@@ -7,7 +7,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".Home.HomeFragment">
+        tools:context=".Home.ui.HomeFragment">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
@@ -22,7 +22,7 @@
             android:layout_height="match_parent"
             android:overScrollMode="never"
             android:layout_below="@id/toolbar"
-            tools:context=".Home.HomeFragment">
+            tools:context=".Home.ui.HomeFragment">
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -36,6 +36,7 @@
                     app:slideInterval="5000"
                     app:radius="3dp"
                     app:strokeWidth="1dp"
+                    android:overScrollMode="never"
                     app:pageTransformer="slide_over"
                     app:pageTransformInterval="1700"
                     app:indicatorGravity="bottom|center_horizontal"

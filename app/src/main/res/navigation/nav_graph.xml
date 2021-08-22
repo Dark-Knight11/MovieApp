@@ -7,20 +7,19 @@
 
     <fragment
         android:id="@+id/homeFragment"
-        android:name="com.sies.movierecomendations.Home.HomeFragment"
+        android:name="com.sies.movierecomendations.Home.ui.HomeFragment"
         android:label="HomeFragment" />
     <fragment
-        android:id="@+id/genreFragment"
-        android:name="com.sies.movierecomendations.Fragments.GenreFragment"
-        android:label="fragment_genre"
-        tools:layout="@layout/fragment_genre" />
-    <fragment
         android:id="@+id/topRatedFragment"
-        android:name="com.sies.movierecomendations.Fragments.TopRatedFragment"
+        android:name="com.sies.movierecomendations.TopRated.ui.TopRatedFragment"
         android:label="fragment_top_rated"
         tools:layout="@layout/fragment_top_rated" />
     <fragment
         android:id="@+id/profileFragment"
-        android:name="com.sies.movierecomendations.Fragments.ProfileFragment"
+        android:name="com.sies.movierecomendations.Profile.ProfileFragment"
         android:label="ProfileFragment" />
+    <fragment
+        android:id="@+id/genreFragment"
+        android:name="com.sies.movierecomendations.Genre.ui.GenreFragment"
+        android:label="GenreFragment" />
 </navigation>
