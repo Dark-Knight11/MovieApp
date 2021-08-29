@@ -39,7 +39,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.sies.movierecomendations.R;
-import com.sies.movierecomendations.EntryPages.SignIn;
+import com.sies.movierecomendations.EntryPages.ui.SignIn;
 import com.sies.movierecomendations.databinding.FragmentProfileBinding;
 
 import java.io.File;
@@ -111,7 +111,7 @@ public class ProfileFragment extends Fragment {
         logout.setOnClickListener(v -> {
             FirebaseAuth.getInstance().signOut();
             startActivity(new Intent(getContext(), SignIn.class));
-            Objects.requireNonNull(getActivity()).finish();
+            requireActivity().finish();
         });
 
         if(networkWhere()) {

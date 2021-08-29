@@ -1,10 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="genres"
+            type="com.sies.movierecomendations.network.Genres" />
+    </data>
+
     <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:gravity="center"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content" >
 
         <TextView
             android:id="@+id/genre"
@@ -16,7 +24,9 @@
             android:textAlignment="center"
             android:textSize="20sp"
             tools:text="Genre"
+            android:text="@{genres.name}"
             android:textColor="@color/white" />
 
     </LinearLayout>
+</layout>
 

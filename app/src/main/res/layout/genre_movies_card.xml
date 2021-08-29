@@ -1,90 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<layout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:id="@+id/frame"
-    android:background="@color/black"
-    android:layout_marginBottom="30dp">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <ImageView
-        android:id="@+id/image"
+    <data>
+        <variable
+            name="movies"
+            type="com.sies.movierecomendations.network.Results" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/frame"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:scaleType="fitXY"
-        android:src="@drawable/ic_launcher_background"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="ContentDescription" />
-
-    <TextView
-        android:id="@+id/title"
-        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="5dp"
-        android:fontFamily="@font/poppins"
-        android:text="Happy"
-        android:textAlignment="center"
-        android:textSize="20sp"
-        android:layout_marginTop="10dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/image"
-        app:layout_constraintVertical_bias="0.0"
-        tools:ignore="HardcodedText" />
+        android:background="@color/black"
+        android:layout_marginBottom="30dp" >
 
-    <TextView
-        android:id="@+id/releaseDate"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="15dp"
-        android:layout_marginTop="10dp"
-        android:fontFamily="@font/pt_sans"
-        android:layout_marginBottom="10dp"
-        android:text="Release Date: 1314123553"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/title"
-        app:layout_constraintVertical_bias="0.0"
-        tools:ignore="HardcodedText" />
+        <ImageView
+            android:id="@+id/image"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:scaleType="fitXY"
+            app:imageURI="@{movies.backdrop_path}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="ContentDescription" />
 
-<!--    <com.google.android.material.floatingactionbutton.FloatingActionButton-->
-<!--        android:id="@+id/star"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_gravity="bottom|end"-->
-<!--        android:src="@drawable/ic_baseline_favorite_24"-->
-<!--        app:fabSize="mini"-->
-<!--        android:layout_marginEnd="15dp"-->
-<!--        android:layout_marginBottom="10dp"-->
-<!--        app:layout_constraintBottom_toBottomOf="parent"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintHorizontal_bias="1.0"-->
-<!--        app:layout_constraintVertical_bias="0.0"-->
-<!--        app:layout_constraintStart_toEndOf="@id/releaseDate"-->
-<!--        app:layout_constraintTop_toBottomOf="@id/title"-->
-<!--        tools:ignore="UnusedAttribute" />-->
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:fontFamily="@font/poppins"
+            android:text="@{movies.name}"
+            android:textAlignment="center"
+            android:textSize="20sp"
+            android:layout_marginTop="10dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/image"
+            app:layout_constraintVertical_bias="0.0"
+            tools:ignore="HardcodedText" />
 
+        <TextView
+            android:id="@+id/releaseDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="10dp"
+            android:fontFamily="@font/pt_sans"
+            android:layout_marginBottom="10dp"
+            app:releaseDate="@{movies.release_date}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/title"
+            app:layout_constraintVertical_bias="0.0"
+            tools:ignore="HardcodedText" />
 
-<!--    <ImageView-->
-<!--        android:id="@+id/star"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_marginEnd="15dp"-->
-<!--        android:layout_marginTop="10dp"-->
-<!--        android:src="@drawable/ic_baseline_star_outline_24"-->
-<!--        app:layout_constraintBottom_toBottomOf="parent"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintHorizontal_bias="1.0"-->
-<!--        app:layout_constraintStart_toEndOf="@id/releaseDate"-->
-<!--        app:layout_constraintTop_toBottomOf="@id/title"-->
-<!--        app:layout_constraintVertical_bias="0.0"-->
-<!--        tools:ignore="ContentDescription" />-->
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

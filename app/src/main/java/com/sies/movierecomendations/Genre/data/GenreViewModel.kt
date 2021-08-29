@@ -6,9 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sies.movierecomendations.BuildConfig
-import com.sies.movierecomendations.network.GenreList
-import com.sies.movierecomendations.network.MovieDbAPI
-import com.sies.movierecomendations.network.MoviesList
+import com.sies.movierecomendations.network.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -28,6 +26,22 @@ class GenreViewModel: ViewModel() {
         .build()
         val movieDbAPI = retrofit.create(MovieDbAPI::class.java)
     }
+
+    private val _navigatedToGenreMovies = MutableLiveData<Boolean>()
+    val navigatedToGenreMovies: LiveData<Boolean>
+        get() = _navigatedToGenreMovies
+
+    private val _details = MutableLiveData<Genres>()
+    val details: LiveData<Genres>
+        get() = _details
+
+    private val _movieDetails = MutableLiveData<Results>()
+    val movieDetails: LiveData<Results>
+        get() = _movieDetails
+
+    private val _navigateToMovieDetails = MutableLiveData<Boolean>()
+    val navigateToMovieDetails: LiveData<Boolean>
+        get() = _navigateToMovieDetails
 
     private val _genreList = MutableLiveData<GenreList>()
     val genreList: LiveData<GenreList>
@@ -52,17 +66,29 @@ class GenreViewModel: ViewModel() {
     }
 
     private fun getList() {
-
         movieDbAPI.getGenre(API_KEY).enqueue(object : Callback<GenreList?> {
             override fun onResponse(call: Call<GenreList?>, response: Response<GenreList?>) {
                 val res = response.body()
                 _genreList.value = res
             }
-
             override fun onFailure(call: Call<GenreList?>, t: Throwable) {
                 Log.i("onFailure: ", t.message!!)
             }
         })
+    }
+
+    fun passDetails(genre: Genres) { _details.value = genre }
+
+    fun navigationDone() {
+        _navigatedToGenreMovies.value = true
+        _details.value = null
+    }
+
+    fun passMovieDetails(res: Results) { _movieDetails.value = res }
+
+    fun navigationToMovieDetailsDone() {
+        _navigateToMovieDetails.value = true
+        _movieDetails.value = null
     }
 
     fun getMovies(genreID: Int) {
@@ -71,14 +97,10 @@ class GenreViewModel: ViewModel() {
                 Log.i("ThreadCall", Thread.currentThread().name)
                 movieDbAPI.getData(GenreMoviesViewModel.API_KEY, "popularity.desc", genreID)
                     .enqueue(object : Callback<MoviesList?> {
-                        override fun onResponse(
-                            call: Call<MoviesList?>,
-                            response: Response<MoviesList?>
-                        ) {
+                        override fun onResponse(call: Call<MoviesList?>, response: Response<MoviesList?>) {
                             val res = response.body()
                             _genreMovie.value = res
                         }
-
                         override fun onFailure(call: Call<MoviesList?>, t: Throwable) {
                             Log.i("onFailure: ", t.message!!)
                         }

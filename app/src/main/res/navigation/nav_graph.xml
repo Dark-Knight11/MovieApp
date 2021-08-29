@@ -21,5 +21,20 @@
     <fragment
         android:id="@+id/genreFragment"
         android:name="com.sies.movierecomendations.Genre.ui.GenreFragment"
-        android:label="GenreFragment" />
+        android:label="GenreFragment" >
+        <action
+            android:id="@+id/action_genreFragment_to_genreMovies"
+            app:destination="@id/genreMovies" />
+    </fragment>
+    <activity
+        android:id="@+id/genreMovies"
+        android:name="com.sies.movierecomendations.Genre.ui.GenreMovies"
+        android:label="GenreMovies" >
+        <argument
+            android:name="id"
+            app:argType="integer" />
+        <argument
+            android:name="name"
+            app:argType="string" />
+    </activity>
 </navigation>

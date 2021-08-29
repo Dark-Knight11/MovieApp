@@ -1,4 +1,4 @@
-package com.sies.movierecomendations.EntryPages;
+package com.sies.movierecomendations.EntryPages.ui;
 
 import android.content.Intent;
 import android.os.Bundle;

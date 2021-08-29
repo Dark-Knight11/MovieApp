@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import com.sies.movierecomendations.Genre.data.GenreViewModel
 import com.sies.movierecomendations.R
@@ -29,9 +30,24 @@ class GenreFragment : Fragment() {
         if (!networkWhere())
             Snackbar.make(requireActivity().findViewById(android.R.id.content), "No Internet", Snackbar.LENGTH_SHORT).show()
 
-        viewModel.genreList.observe(viewLifecycleOwner, {
-            binding.movies.adapter = genreAdapter(it)
+        val adapter = GenreAdapter(GenreClickListener {
+            viewModel.passDetails(it)
         })
+
+        binding.movies.adapter = adapter
+        viewModel.genreList.observe(viewLifecycleOwner, {
+            it?.let {
+                adapter.submitList(it.genres)
+            }
+        })
+
+        viewModel.details.observe(viewLifecycleOwner, {
+            if (it != null) {
+                this.findNavController().navigate(GenreFragmentDirections.actionGenreFragmentToGenreMovies(it.id, it.name))
+                viewModel.navigationDone()
+            }
+        })
+
         return binding.root
     }
 

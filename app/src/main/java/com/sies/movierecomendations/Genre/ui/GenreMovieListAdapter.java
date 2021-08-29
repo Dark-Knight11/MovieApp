@@ -14,9 +14,9 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.sies.movierecomendations.network.MoviesList;
 import com.sies.movierecomendations.MovieDetails.ui.MovieDetails;
 import com.sies.movierecomendations.R;
+import com.sies.movierecomendations.network.MoviesList;
 
 public class GenreMovieListAdapter extends RecyclerView.Adapter<GenreMovieListAdapter.ViewHolder> {
 

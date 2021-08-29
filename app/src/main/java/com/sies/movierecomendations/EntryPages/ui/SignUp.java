@@ -1,4 +1,4 @@
-package com.sies.movierecomendations.EntryPages;
+package com.sies.movierecomendations.EntryPages.ui;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
