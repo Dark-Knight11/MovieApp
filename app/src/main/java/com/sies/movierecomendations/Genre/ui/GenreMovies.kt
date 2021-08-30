@@ -3,10 +3,12 @@ package com.sies.movierecomendations.Genre.ui
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.navArgs
 import com.sies.movierecomendations.Genre.data.GenreViewModel
 import com.sies.movierecomendations.MovieDetails.ui.MovieDetails
+import com.sies.movierecomendations.R
 import com.sies.movierecomendations.databinding.ActivityGenreMoviesBinding
 
 class GenreMovies : AppCompatActivity() {
@@ -16,7 +18,7 @@ class GenreMovies : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityGenreMoviesBinding.inflate(layoutInflater)
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_genre_movies)
         binding.lifecycleOwner = this
 
         val genreMoviesArgs by navArgs<GenreMoviesArgs>()
@@ -35,22 +37,24 @@ class GenreMovies : AppCompatActivity() {
         binding.recyclerView.adapter = adapter
 
         viewModel.genreMovie.observe(this, {
-            adapter.submitList(it.results)
+            it?.let {
+                adapter.submitList(it)
+            }
         })
 
         viewModel.movieDetails.observe(this, {
-            val intent = Intent(this, MovieDetails::class.java)
-            intent.putExtra("backdrop-path", it.backdrop_path)
-            intent.putExtra("title", it.title)
-            intent.putExtra("release-date", it.release_date)
-            intent.putExtra("rating", it.vote_average)
-            intent.putExtra("overview", it.overview)
-            intent.putExtra("id", it.id)
-            startActivity(intent)
-            viewModel.navigationToMovieDetailsDone()
+            it?.let {
+                val intent = Intent(this, MovieDetails::class.java)
+                intent.putExtra("backdrop-path", it.backdrop_path)
+                intent.putExtra("title", it.title)
+                intent.putExtra("release-date", it.release_date)
+                intent.putExtra("rating", it.vote_average)
+                intent.putExtra("overview", it.overview)
+                intent.putExtra("id", it.id)
+                startActivity(intent)
+                viewModel.navigationToMovieDetailsDone()
+            }
         })
-
-        setContentView(binding.root)
     }
 
     override fun onSupportNavigateUp(): Boolean {

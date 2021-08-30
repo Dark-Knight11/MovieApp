@@ -47,8 +47,8 @@ class GenreViewModel: ViewModel() {
     val genreList: LiveData<GenreList>
         get() = _genreList
 
-    private val _genreMovie = MutableLiveData<MoviesList>()
-    val genreMovie: LiveData<MoviesList>
+    private val _genreMovie = MutableLiveData<List<Results>>()
+    val genreMovie: LiveData<List<Results>>
         get() = _genreMovie
 
     init {
@@ -99,7 +99,9 @@ class GenreViewModel: ViewModel() {
                     .enqueue(object : Callback<MoviesList?> {
                         override fun onResponse(call: Call<MoviesList?>, response: Response<MoviesList?>) {
                             val res = response.body()
-                            _genreMovie.value = res
+                            res?.let {
+                                _genreMovie.value = res.results
+                            }
                         }
                         override fun onFailure(call: Call<MoviesList?>, t: Throwable) {
                             Log.i("onFailure: ", t.message!!)

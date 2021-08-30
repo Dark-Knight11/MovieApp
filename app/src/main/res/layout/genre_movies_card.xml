@@ -20,9 +20,9 @@
         <ImageView
             android:id="@+id/image"
             android:layout_width="match_parent"
-            android:layout_height="200dp"
+            android:layout_height="wrap_content"
             android:scaleType="fitXY"
-            app:imageURI="@{movies.backdrop_path}"
+            app:imageURI="@{movies.poster_path}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -34,7 +34,9 @@
             android:layout_height="wrap_content"
             android:padding="5dp"
             android:fontFamily="@font/poppins"
-            android:text="@{movies.name}"
+            android:text="@{movies.title}"
+            tools:text="LOLOLOL"
+            android:textColor="@color/white"
             android:textAlignment="center"
             android:textSize="20sp"
             android:layout_marginTop="10dp"
@@ -51,16 +53,18 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="15dp"
             android:layout_marginTop="10dp"
-            android:fontFamily="@font/pt_sans"
             android:layout_marginBottom="10dp"
-            app:releaseDate="@{movies.release_date}"
+            android:fontFamily="@font/pt_sans"
+            android:textColor="@color/white"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintHorizontal_bias="0.476"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/title"
             app:layout_constraintVertical_bias="0.0"
-            tools:ignore="HardcodedText" />
+            app:releaseDate="@{movies.release_date}"
+            tools:ignore="HardcodedText"
+            tools:text="12-34-5039" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
