@@ -9,7 +9,7 @@ import com.sies.movierecomendations.databinding.GenreMoviesCardBinding
 import com.sies.movierecomendations.network.Results
 
 class MovieListAdapter(private val clickListener: MovieListClickListener): ListAdapter<Results, MovieListAdapter.ViewHolder>(MovieListDiffCallback()) {
-    class ViewHolder(private var binding: GenreMoviesCardBinding): RecyclerView.ViewHolder(binding.root) {
+    class ViewHolder(var binding: GenreMoviesCardBinding): RecyclerView.ViewHolder(binding.root) {
         fun bind(res: Results, clickListener: MovieListClickListener) {
             binding.movies = res
 //            binding.clickListener = clickListener

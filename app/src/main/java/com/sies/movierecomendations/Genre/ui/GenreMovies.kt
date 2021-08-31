@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.navArgs
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.sies.movierecomendations.Genre.data.GenreViewModel
 import com.sies.movierecomendations.MovieDetails.ui.MovieDetails
 import com.sies.movierecomendations.R
@@ -34,6 +35,7 @@ class GenreMovies : AppCompatActivity() {
         val adapter = MovieListAdapter(MovieListClickListener {
             viewModel.passMovieDetails(it)
         })
+        binding.recyclerView.layoutManager = LinearLayoutManager(this)
         binding.recyclerView.adapter = adapter
 
         viewModel.genreMovie.observe(this, {

@@ -10,22 +10,20 @@
             type="com.sies.movierecomendations.network.Results" />
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <RelativeLayout
         android:id="@+id/frame"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:background="@color/black"
         android:layout_marginBottom="30dp" >
 
         <ImageView
             android:id="@+id/image"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="200dp"
             android:scaleType="fitXY"
-            app:imageURI="@{movies.poster_path}"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            imageURI="@{movies.backdrop_path}"
+            android:src="@drawable/default_pfp"
             tools:ignore="ContentDescription" />
 
         <TextView
@@ -40,11 +38,8 @@
             android:textAlignment="center"
             android:textSize="20sp"
             android:layout_marginTop="10dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/image"
-            app:layout_constraintVertical_bias="0.0"
+            android:layout_below="@id/image"
+            android:layout_centerHorizontal="true"
             tools:ignore="HardcodedText" />
 
         <TextView
@@ -56,15 +51,11 @@
             android:layout_marginBottom="10dp"
             android:fontFamily="@font/pt_sans"
             android:textColor="@color/white"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.476"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/title"
-            app:layout_constraintVertical_bias="0.0"
+            android:layout_below="@id/title"
+            android:layout_centerHorizontal="true"
             app:releaseDate="@{movies.release_date}"
             tools:ignore="HardcodedText"
             tools:text="12-34-5039" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </RelativeLayout>
 </layout>

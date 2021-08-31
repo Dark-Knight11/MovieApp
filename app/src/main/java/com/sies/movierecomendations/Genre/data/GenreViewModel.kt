@@ -95,7 +95,7 @@ class GenreViewModel: ViewModel() {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 Log.i("ThreadCall", Thread.currentThread().name)
-                movieDbAPI.getData(GenreMoviesViewModel.API_KEY, "popularity.desc", genreID)
+                movieDbAPI.getData(API_KEY, "popularity.desc", genreID)
                     .enqueue(object : Callback<MoviesList?> {
                         override fun onResponse(call: Call<MoviesList?>, response: Response<MoviesList?>) {
                             val res = response.body()
