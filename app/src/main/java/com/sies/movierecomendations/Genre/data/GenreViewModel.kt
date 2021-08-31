@@ -20,33 +20,39 @@ class GenreViewModel: ViewModel() {
 
     companion object {
         const val API_KEY = BuildConfig.API_KEY
-        val retrofit = Retrofit.Builder()
+        private val retrofit: Retrofit = Retrofit.Builder()
         .baseUrl("https://api.themoviedb.org/3/")
         .addConverterFactory(GsonConverterFactory.create())
         .build()
-        val movieDbAPI = retrofit.create(MovieDbAPI::class.java)
+        val movieDbAPI: MovieDbAPI = retrofit.create(MovieDbAPI::class.java)
     }
 
+    // navigation to genre movies event
     private val _navigatedToGenreMovies = MutableLiveData<Boolean>()
     val navigatedToGenreMovies: LiveData<Boolean>
         get() = _navigatedToGenreMovies
 
+    // genre object passed to genre adapter
     private val _details = MutableLiveData<Genres>()
     val details: LiveData<Genres>
         get() = _details
 
+    // movie details passed to movie list adapter
     private val _movieDetails = MutableLiveData<Results>()
     val movieDetails: LiveData<Results>
         get() = _movieDetails
 
+    // navigation to movie details screen event
     private val _navigateToMovieDetails = MutableLiveData<Boolean>()
     val navigateToMovieDetails: LiveData<Boolean>
         get() = _navigateToMovieDetails
 
+    // genre List data
     private val _genreList = MutableLiveData<GenreList>()
     val genreList: LiveData<GenreList>
         get() = _genreList
 
+    // genre movies data
     private val _genreMovie = MutableLiveData<MoviesList>()
     val genreMovie: LiveData<MoviesList>
         get() = _genreMovie
@@ -95,7 +101,7 @@ class GenreViewModel: ViewModel() {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 Log.i("ThreadCall", Thread.currentThread().name)
-                movieDbAPI.getData(GenreMoviesViewModel.API_KEY, "popularity.desc", genreID)
+                movieDbAPI.getData(API_KEY, "popularity.desc", genreID)
                     .enqueue(object : Callback<MoviesList?> {
                         override fun onResponse(call: Call<MoviesList?>, response: Response<MoviesList?>) {
                             val res = response.body()

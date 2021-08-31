@@ -22,6 +22,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:overScrollMode="never"
+            android:layout_marginBottom="10dp"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintTop_toBottomOf="@id/toolbar"
             app:layout_constraintBottom_toBottomOf="parent"

@@ -13,9 +13,7 @@ class MovieListAdapter(private val clickListener: MovieListClickListener): ListA
         fun bind(res: Results, clickListener: MovieListClickListener) {
             binding.movies = res
 //            binding.clickListener = clickListener
-            binding.frame.setOnClickListener {
-                clickListener.onClick(res)
-            }
+            binding.frame.setOnClickListener { clickListener.onClick(res) }
             binding.executePendingBindings()
         }
     }

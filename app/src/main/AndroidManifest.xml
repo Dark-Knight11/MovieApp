@@ -17,9 +17,11 @@
         android:label="CineMania"
         android:roundIcon="@drawable/icon"
         android:supportsRtl="true"
+        android:usesCleartextTraffic="true"
         android:theme="@style/Theme.MovieRecomendations"
         tools:ignore="AllowBackup"
-        tools:replace="android:label">
+        tools:replace="android:label"
+        tools:targetApi="m">
         <activity android:name=".Search.ui.SearchActivity" />
         <activity android:name=".EntryPages.ui.SignIn"
             tools:ignore="IntentFilterExportedReceiver" >

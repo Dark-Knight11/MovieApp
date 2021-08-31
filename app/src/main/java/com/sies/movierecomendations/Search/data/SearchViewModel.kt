@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.sies.movierecomendations.BuildConfig
 import com.sies.movierecomendations.network.MovieDbAPI
 import com.sies.movierecomendations.network.MoviesList
+import com.sies.movierecomendations.network.Results
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -31,6 +32,14 @@ class SearchViewModel: ViewModel() {
     private val _result = MutableLiveData<MoviesList>()
     val result: LiveData<MoviesList>
         get() = _result
+
+    private val _term = MutableLiveData<Results>()
+    val term: LiveData<Results>
+        get() = _term
+
+    fun passDetailsToAdapter(res: Results) {
+        _term.value = res
+    }
 
     fun search(query: String) {
         viewModelScope.launch {

@@ -10,57 +10,97 @@
             type="com.sies.movierecomendations.network.Results" />
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <RelativeLayout
         android:id="@+id/frame"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/black"
-        android:layout_marginBottom="30dp" >
+        android:layout_height="match_parent"
+        android:background="@color/black" >
 
         <ImageView
-            android:id="@+id/image"
+            android:id="@+id/backcover"
             android:layout_width="match_parent"
             android:layout_height="200dp"
             android:scaleType="fitXY"
             app:imageURI="@{movies.backdrop_path}"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
             tools:ignore="ContentDescription" />
 
         <TextView
             android:id="@+id/title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="5dp"
-            android:fontFamily="@font/poppins"
-            android:text="@{movies.name}"
+            android:text="@{movies.title}"
             android:textAlignment="center"
+            tools:text="OLOLOLO"
             android:textSize="20sp"
             android:layout_marginTop="10dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/image"
-            app:layout_constraintVertical_bias="0.0"
-            tools:ignore="HardcodedText" />
+            android:padding="5dp"
+            android:fontFamily="@font/poppins"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/backcover" />
 
         <TextView
-            android:id="@+id/releaseDate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textAlignment="center"
+            app:releaseDate="@{movies.release_date}"
+            tools:textColor="@color/white"
+            android:layout_centerHorizontal="true"
             android:layout_marginStart="15dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="5dp"
             android:fontFamily="@font/pt_sans"
             android:layout_marginBottom="10dp"
-            app:releaseDate="@{movies.release_date}"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/title"
-            app:layout_constraintVertical_bias="0.0"
-            tools:ignore="HardcodedText" />
+            android:layout_below="@id/title"/>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </RelativeLayout>
+
 </layout>
+
+<!--<androidx.constraintlayout.widget.ConstraintLayout-->
+<!--android:id="@+id/frame"-->
+<!--android:layout_width="match_parent"-->
+<!--android:layout_height="wrap_content"-->
+<!--android:background="@color/black"-->
+<!--android:layout_marginBottom="30dp" >-->
+
+<!--<ImageView-->
+<!--    android:id="@+id/image"-->
+<!--    android:layout_width="match_parent"-->
+<!--    android:layout_height="200dp"-->
+<!--    android:scaleType="fitXY"-->
+<!--    app:imageURI="@{movies.backdrop_path}"-->
+<!--    app:layout_constraintBottom_toBottomOf="parent"-->
+<!--    app:layout_constraintEnd_toEndOf="parent"-->
+<!--    app:layout_constraintStart_toStartOf="parent"-->
+<!--    app:layout_constraintTop_toTopOf="parent"-->
+<!--    app:layout_constraintVertical_bias="0.0"-->
+<!--    tools:ignore="ContentDescription" />-->
+
+<!--<TextView-->
+<!--    android:id="@+id/title"-->
+<!--    android:layout_width="wrap_content"-->
+<!--    android:layout_height="wrap_content"-->
+<!--    android:padding="5dp"-->
+<!--    android:fontFamily="@font/poppins"-->
+<!--    android:text="@{movies.title}"-->
+<!--    android:textAlignment="center"-->
+<!--    android:textSize="20sp"-->
+<!--    android:layout_marginTop="10dp"-->
+<!--    app:layout_constraintEnd_toEndOf="parent"-->
+<!--    app:layout_constraintStart_toStartOf="parent"-->
+<!--    app:layout_constraintTop_toBottomOf="@id/image"-->
+<!--    app:layout_constraintVertical_bias="0.0" />-->
+
+<!--<TextView-->
+<!--    android:id="@+id/releaseDate"-->
+<!--    android:layout_width="wrap_content"-->
+<!--    android:layout_height="wrap_content"-->
+<!--    android:layout_marginStart="15dp"-->
+<!--    android:layout_marginTop="10dp"-->
+<!--    android:fontFamily="@font/pt_sans"-->
+<!--    android:layout_marginBottom="10dp"-->
+<!--    app:releaseDate="@{movies.release_date}"-->
+<!--    app:layout_constraintEnd_toEndOf="parent"-->
+<!--    app:layout_constraintStart_toStartOf="parent"-->
+<!--    app:layout_constraintTop_toBottomOf="@id/title"/>-->
+
+<!--</androidx.constraintlayout.widget.ConstraintLayout>-->

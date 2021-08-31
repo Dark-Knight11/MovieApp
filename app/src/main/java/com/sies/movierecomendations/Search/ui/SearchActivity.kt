@@ -7,7 +7,10 @@ import android.text.Editable
 import android.text.TextWatcher
 import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
 import androidx.appcompat.app.AppCompatActivity
+import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
+import com.sies.movierecomendations.MovieDetails.ui.MovieDetails
+import com.sies.movierecomendations.R
 import com.sies.movierecomendations.Search.data.SearchViewModel
 import com.sies.movierecomendations.databinding.ActivitySearchBinding
 import java.util.*
@@ -19,10 +22,38 @@ class SearchActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivitySearchBinding.inflate(layoutInflater)
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_search)
         binding.lifecycleOwner = this
 
         viewModel = ViewModelProvider(this).get(SearchViewModel::class.java)
+
+        val adapter = SearchAdapter(SearchItemClickListener {
+            viewModel.passDetailsToAdapter(it)
+        })
+
+        binding.recyclerView.adapter = adapter
+        viewModel.result.observe(this, { it?.let {
+            adapter.submitList(it.results)
+        }})
+
+        viewModel.term.observe(this, {
+            it?.let {
+                val intent = Intent(this, MovieDetails::class.java)
+                if (it.media_type == "tv"){
+                    intent.putExtra("title", it.original_name)
+                    intent.putExtra("release-date", it.first_air_date)
+                }
+                else {
+                    intent.putExtra("title", it.title)
+                    intent.putExtra("release-date", it.release_date)
+                }
+                intent.putExtra("backdrop-path", it.backdrop_path)
+                intent.putExtra("rating", it.vote_average)
+                intent.putExtra("overview", it.overview)
+                intent.putExtra("id", it.id)
+                startActivity(intent)
+            }
+        })
 
         binding.searchBar.requestFocus()
         binding.voiceSearch.setOnClickListener { voiceSearch() }
@@ -37,12 +68,6 @@ class SearchActivity : AppCompatActivity() {
             }
             override fun afterTextChanged(s: Editable) {}
         })
-
-        viewModel.result.observe(this, {
-            binding.recyclerView.adapter = SearchAdapter(it)
-        })
-
-        setContentView(binding.root)
     }
 
     private var voiceActivityResultLauncher = registerForActivityResult(StartActivityForResult()) {
