@@ -1,17 +1,13 @@
 package com.sies.movierecomendations.TopRated.data
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sies.movierecomendations.BuildConfig
-import com.sies.movierecomendations.network.MovieDbAPI
+import com.sies.movierecomendations.network.APIService
 import com.sies.movierecomendations.network.MoviesList
 import kotlinx.coroutines.launch
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
@@ -19,6 +15,11 @@ class TopMoviesViewModel: ViewModel() {
 
     companion object {
         const val API_KEY = BuildConfig.API_KEY
+        private val retrofit: Retrofit = Retrofit.Builder()
+            .baseUrl("https://api.themoviedb.org/3/")
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+        val movieDbAPI: APIService = retrofit.create(APIService::class.java)
     }
 
     private val _topRatedMovies = MutableLiveData<MoviesList>()
@@ -35,35 +36,11 @@ class TopMoviesViewModel: ViewModel() {
         }
     }
 
-    fun getApi() {
-        val retrofit = Retrofit.Builder()
-            .baseUrl("https://api.themoviedb.org/3/")
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-        val movieDbAPI = retrofit.create(MovieDbAPI::class.java)
+    private suspend fun getApi() {
+        val res = movieDbAPI.getMoviesTopRated(API_KEY)
+        _topRatedMovies.value = res
 
-        viewModelScope.launch {
-        movieDbAPI.getMoviesTopRated(API_KEY).enqueue(object : Callback<MoviesList?> {
-            override fun onResponse(call: Call<MoviesList?>, response: Response<MoviesList?>) {
-                val res = response.body()
-                _topRatedMovies.value = res
-            }
-
-            override fun onFailure(call: Call<MoviesList?>, t: Throwable) {
-                Log.i("onFailure: ", t.message!!)
-            }
-        })
-
-        movieDbAPI.getTvTopRated(API_KEY).enqueue(object : Callback<MoviesList?> {
-            override fun onResponse(call: Call<MoviesList?>, response: Response<MoviesList?>) {
-                val res = response.body()
-                _topRatedTVShows.value = res
-            }
-
-            override fun onFailure(call: Call<MoviesList?>, t: Throwable) {
-                Log.i("onFailure: ", t.message!!)
-            }
-        })
-            }
+        val response = movieDbAPI.getTvTopRated(API_KEY)
+        _topRatedTVShows.value = response
     }
 }

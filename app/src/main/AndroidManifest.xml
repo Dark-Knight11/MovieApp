@@ -12,6 +12,7 @@
         tools:ignore="ScopedStorage" />
 
     <application
+        android:name=".App"
         android:allowBackup="true"
         android:icon="@drawable/icon"
         android:label="CineMania"

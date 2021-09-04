@@ -1,20 +1,14 @@
 package com.sies.movierecomendations.Search.data
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sies.movierecomendations.BuildConfig
-import com.sies.movierecomendations.network.MovieDbAPI
+import com.sies.movierecomendations.network.APIService
 import com.sies.movierecomendations.network.MoviesList
 import com.sies.movierecomendations.network.Results
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
@@ -26,7 +20,7 @@ class SearchViewModel: ViewModel() {
             .baseUrl("https://api.themoviedb.org/3/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
-        private val movieDbAPI: MovieDbAPI = retrofit.create(MovieDbAPI::class.java)
+        val movieDbAPI: APIService = retrofit.create(APIService::class.java)
     }
 
     private val _result = MutableLiveData<MoviesList>()
@@ -43,21 +37,8 @@ class SearchViewModel: ViewModel() {
 
     fun search(query: String) {
         viewModelScope.launch {
-            withContext(Dispatchers.IO) {
-                movieDbAPI.getSearchResult(API_KEY, query).enqueue(object : Callback<MoviesList?> {
-                    override fun onResponse(
-                        call: Call<MoviesList?>,
-                        response: Response<MoviesList?>
-                    ) {
-                        val res = response.body()
-                        _result.value = res
-                    }
-
-                    override fun onFailure(call: Call<MoviesList?>, t: Throwable) {
-                        Log.i("onFailure: ", t.message!!)
-                    }
-                })
-            }
+            val res = movieDbAPI.getSearchResult(API_KEY, query)
+            _result.value = res
         }
     }
 }

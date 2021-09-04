@@ -1,6 +1,11 @@
 package com.sies.movierecomendations.network;
 
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
+@Entity
 public class Results {
+    @PrimaryKey private final int id;
     private final String title;
     private final String original_title;
     private final String overview;
@@ -8,9 +13,9 @@ public class Results {
     private final String poster_path;
     private final String backdrop_path;
     private final String media_type;
-    private final int id;
     private final float vote_average;
 
+    // TV
     private final String name;
     private final String original_name;
     private final String first_air_date;

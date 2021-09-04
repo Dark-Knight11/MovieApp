@@ -6,23 +6,25 @@ import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.sies.movierecomendations.MovieDetails.data.MovieDetailViewModel
-import com.sies.movierecomendations.MovieDetails.data.MovieDetailViewModelFactory
+import com.sies.movierecomendations.R
 import com.sies.movierecomendations.databinding.ActivityMovieDetailScreenBinding
+import kotlinx.coroutines.launch
 
 class MovieDetails: AppCompatActivity() {
 
     lateinit var binding: ActivityMovieDetailScreenBinding
     lateinit var viewModel: MovieDetailViewModel
-    lateinit var viewModelFactory: MovieDetailViewModelFactory
     var media = "movie"
 
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityMovieDetailScreenBinding.inflate(layoutInflater)
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_movie_detail_screen)
         binding.lifecycleOwner = this
 
         val backdropPath = intent.getStringExtra("backdrop-path")
@@ -34,8 +36,10 @@ class MovieDetails: AppCompatActivity() {
         val flag = intent.getIntExtra("flag", 1)
 
         if (flag != 1) media = "tv"
-        viewModelFactory = MovieDetailViewModelFactory(media, id)
-        viewModel = ViewModelProvider(this, viewModelFactory).get(MovieDetailViewModel::class.java)
+        viewModel = ViewModelProvider(this).get(MovieDetailViewModel::class.java)
+        lifecycleScope.launch {
+            viewModel.getApi(media, id)
+        }
 
         Glide.with(this@MovieDetails).load("https://image.tmdb.org/t/p/original$backdropPath")
             .into(binding.backdrop)
@@ -55,6 +59,5 @@ class MovieDetails: AppCompatActivity() {
             binding.youtube.visibility = View.VISIBLE
         })
 
-        setContentView(binding.root)
     }
 }

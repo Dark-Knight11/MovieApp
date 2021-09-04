@@ -71,6 +71,9 @@
                     android:layout_below="@id/divider"
                     android:layout_marginEnd="5dp"
                     android:layout_marginTop="10dp"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    android:orientation="horizontal"
+                    app:reverseLayout="false"
                     android:overScrollMode="never" />
 
                 <TextView
@@ -103,6 +106,9 @@
                     android:layout_below="@id/divider2"
                     android:layout_marginEnd="5dp"
                     android:layout_marginTop="10dp"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    android:orientation="horizontal"
+                    app:reverseLayout="false"
                     android:overScrollMode="never" />
             </RelativeLayout>
         </ScrollView>
