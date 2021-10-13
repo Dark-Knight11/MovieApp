@@ -74,7 +74,7 @@ public class topTv extends Fragment {
 
             @Override
             public void onFailure(@NonNull Call<MoviesList> call, @NonNull Throwable t) {
-                Log.i("onFailure: ", t.getMessage());
+                Log.i("onFailure:", t.getMessage());
             }
         });
     }
